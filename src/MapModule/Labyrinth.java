@@ -5,10 +5,8 @@
  */
 package MapModule;
 
-import Enums.CellObjectType;
 import java.util.ArrayList;
 import javafx.util.Pair;
-import javax.naming.Reference;
 
 /**
  *
@@ -22,7 +20,8 @@ public class Labyrinth {
         _objectsMatrix[(int)position.getKey()][(int)position.getValue()] = cellObject; 
     }
     
-    public CellObject SetCell(Pair position){
+    public CellObject GetCell(Pair position){
         return _objectsMatrix[(int)position.getKey()][(int)position.getValue()]; 
     }
+    
 }

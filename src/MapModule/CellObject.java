@@ -14,6 +14,13 @@ import Enums.CellObjectType;
 public class CellObject {
     private CellObjectType _cellObjectType;
     
+    public CellObject(){
+        _cellObjectType = CellObjectType.EmptyCellObject;
+    }
+    
+    public CellObject(CellObjectType cellObjectType){
+        SetCellObjectType(cellObjectType);
+    }
     public boolean IsActive(){
         return _cellObjectType == CellObjectType.PacmanObject ||
                 _cellObjectType == CellObjectType.GhostObject;

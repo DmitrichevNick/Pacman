@@ -5,10 +5,14 @@
  */
 package MapModule;
 
+import Enums.CellObjectType;
+
 /**
  *
  * @author August
  */
-public class WallCellObject {
-    
+public class WallCellObject extends CellObject{
+    public WallCellObject(){
+        super.SetCellObjectType(CellObjectType.WallObject);
+    }
 }

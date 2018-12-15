@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Enums;
+package JudgeModule;
+
+import Enums.CellObjectType;
+import Enums.RuleResultType;
 
 /**
  *
  * @author August
  */
-public enum CellObjectType 
-{
-    WallObject,
-    PacmanObject,
-    GhostObject,
-    FoodObject,
-    EmptyCellObject
+public interface IRule {
+    RuleResultType checkRule(CellObjectType passiveObject, CellObjectType activeObject);
 }
-

@@ -5,12 +5,19 @@
  */
 package MapModule;
 
+import Enums.CellObjectType;
+
 /**
  *
  * @author August
  */
 public class PacmanCellObject extends CellObject {
     private int _ownerId;
+    
+    public PacmanCellObject(int ownerId){
+        super.SetCellObjectType(CellObjectType.PacmanObject);
+        _ownerId = ownerId;
+    }
     
     public void SetOwnerId(int ownerId){
         _ownerId = ownerId;

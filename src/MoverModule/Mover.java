@@ -5,16 +5,21 @@
  */
 package MoverModule;
 import Enums.MoveType;
+import JudgeModule.JudgeMaker;
+import MapModule.Labyrinth;
+import MapModule.CellObject;
 
 /**
  *
  * @author August
  */
 public class Mover {
-   // TODO: private JudgeMaker _judgeMaker;
-   // TODO: private Labyrinth _labyrinth;
-    public void MovePacman(MoveType direction){
-        // TODO
+    private JudgeMaker _judgeMaker;
+    private Labyrinth _labyrinth;
+    
+    public void MovePacman(int idPacman, MoveType direction){
+       // Pair = 
+       // CellObject cellObject = new CellObject();
     }
     
     public void MoveGhost(){

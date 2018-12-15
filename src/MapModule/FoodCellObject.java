@@ -5,6 +5,7 @@
  */
 package MapModule;
 
+import Enums.CellObjectType;
 import Enums.FoodType;
 
 /**
@@ -13,6 +14,16 @@ import Enums.FoodType;
  */
 public class FoodCellObject extends CellObject {
     private FoodType _foodType;
+    
+    public FoodCellObject(){
+        super.SetCellObjectType(CellObjectType.FoodObject);
+        _foodType = FoodType.SimpleFood;
+    }
+    
+    public FoodCellObject(FoodType foodType){
+        super.SetCellObjectType(CellObjectType.FoodObject);
+        _foodType = foodType;
+    }
     
     public void SetFoodType(FoodType foodType){
         _foodType = foodType;

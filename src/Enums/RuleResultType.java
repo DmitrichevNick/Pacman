@@ -9,12 +9,9 @@ package Enums;
  *
  * @author August
  */
-public enum CellObjectType 
+public enum RuleResultType 
 {
-    WallObject,
-    PacmanObject,
-    GhostObject,
-    FoodObject,
-    EmptyCellObject
+    SavePositions,
+    OldDestroyed, 
+    NewDestroyed 
 }
-

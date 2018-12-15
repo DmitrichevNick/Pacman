@@ -5,6 +5,7 @@
  */
 package MapModule;
 
+import Enums.CellObjectType;
 import Enums.GhostType;
 
 /**
@@ -14,6 +15,18 @@ import Enums.GhostType;
 public class GhostCellObject extends CellObject{
     private GhostType _ghostType;
     private int _id;
+    
+    public GhostCellObject(int id){
+        super.SetCellObjectType(CellObjectType.GhostObject);
+        _id = id;
+        _ghostType = GhostType.RedGhost;
+    }
+    
+    public GhostCellObject(int id, GhostType ghostType){
+        super.SetCellObjectType(CellObjectType.GhostObject);
+        _id = id;
+        _ghostType = ghostType;
+    }
     
     public void SetGhostType(GhostType ghostType){
         _ghostType = ghostType;
