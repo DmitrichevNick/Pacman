@@ -4,10 +4,13 @@
  * and open the template in the editor.
  */
 package MoverModule;
+import Enums.CellObjectType;
 import Enums.MoveType;
+import Enums.RuleResultType;
 import JudgeModule.JudgeMaker;
 import MapModule.Labyrinth;
 import MapModule.CellObject;
+import javafx.util.Pair;
 
 /**
  *
@@ -18,8 +21,30 @@ public class Mover {
     private Labyrinth _labyrinth;
     
     public void MovePacman(int idPacman, MoveType direction){
-       // Pair = 
-       // CellObject cellObject = new CellObject();
+        Pair position= _labyrinth.GetPosition(idPacman);
+        Pair nextPosition = null;
+        switch (direction){
+            case LeftMove:
+                nextPosition = new Pair((int)position.getKey(),((int)position.getValue())-1);
+                break;
+            case RightMove:
+                nextPosition = new Pair((int)position.getKey(),((int)position.getValue())+1);
+                break;
+            case TopMove:
+                nextPosition = new Pair(((int)position.getKey())-1,position.getValue());
+                break;
+            case BottomMove:
+                nextPosition = new Pair(((int)position.getKey())+1,position.getValue());
+                break;
+        }
+        
+        CellObject nextCell = _labyrinth.GetCell(nextPosition);
+        
+        RuleResultType res = _judgeMaker.CheckRules(CellObjectType.PacmanObject, nextCell.GetCellObjectType());
+        
+        switch (res){
+            //case Old
+        }
     }
     
     public void MoveGhost(){
