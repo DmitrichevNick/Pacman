@@ -6,6 +6,7 @@
 package MapModule;
 
 import Enums.CellObjectType;
+import javafx.util.Pair;
 
 /**
  *
@@ -13,10 +14,20 @@ import Enums.CellObjectType;
  */
 public class PacmanCellObject extends CellObject {
     private int _ownerId;
+    private Pair _position;
     
-    public PacmanCellObject(int ownerId){
+    public PacmanCellObject(int ownerId, Pair position){
         super.SetCellObjectType(CellObjectType.PacmanObject);
         _ownerId = ownerId;
+        _position = position;
+    }
+    
+    public void SetPosition(Pair position){
+        _position = position;
+    }
+    
+    public Pair GetPosition(){
+        return _position;
     }
     
     public void SetOwnerId(int ownerId){

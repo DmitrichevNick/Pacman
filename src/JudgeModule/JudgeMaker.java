@@ -16,6 +16,11 @@ import java.util.ArrayList;
 public class JudgeMaker {
     private ArrayList<IRule> _rules;
     
+    public void JudgeMaker(){
+        _rules.add(new PacmanWallRule());
+        _rules.add(new NothingRule());
+    }
+    
     public void AddRule(IRule rule){
         _rules.add(rule);
     }

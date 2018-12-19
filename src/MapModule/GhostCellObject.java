@@ -7,6 +7,7 @@ package MapModule;
 
 import Enums.CellObjectType;
 import Enums.GhostType;
+import javafx.util.Pair;
 
 /**
  *
@@ -15,11 +16,21 @@ import Enums.GhostType;
 public class GhostCellObject extends CellObject{
     private GhostType _ghostType;
     private int _id;
+    private Pair _position;
     
-    public GhostCellObject(int id){
+    public GhostCellObject(int id, Pair position){
         super.SetCellObjectType(CellObjectType.GhostObject);
         _id = id;
         _ghostType = GhostType.RedGhost;
+        _position = position;
+    }
+    
+    public void SetPosition(Pair position){
+        _position = position;
+    }
+    
+    public Pair GetPosition(){
+        return _position;
     }
     
     public GhostCellObject(int id, GhostType ghostType){

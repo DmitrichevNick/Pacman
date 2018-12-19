@@ -11,12 +11,20 @@
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/GhostType.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MoverModule/RedAlgorithm.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/Map.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/JudgeModule/IRule.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/JudgeModule/PacmanWallRule.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/FoodCellObject.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/JudgeModule/NothingRule.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/ServerModule/Player.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MoverModule/Mover.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/CellObject.java</file>
-            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/PacmanCellObject.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/JudgeModule/PacmanGhostRule.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/RuleResultType.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/FoodType.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MoverModule/IAlgorithm.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/TestFrame.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/ServerModule/Session.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/JudgeModule/JudgeMaker.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/Labyrinth.java</file>
         </group>
     </open-files>

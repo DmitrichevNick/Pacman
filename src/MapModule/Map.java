@@ -5,7 +5,9 @@
  */
 package MapModule;
 
+import JudgeModule.JudgeMaker;
 import MoverModule.Mover;
+import javafx.util.Pair;
 
 /**
  *
@@ -14,6 +16,20 @@ import MoverModule.Mover;
 public class Map {
     private Labyrinth _labyrinth;
     private Mover _mover;
+    
+    public Map(){
+        _labyrinth = new Labyrinth();
+        JudgeMaker jm = new JudgeMaker();
+        _mover = new Mover(_labyrinth,jm);
+    }
+    
+    public Pair getDefaultPacmanPos(){
+        return _labyrinth.GetDefaultPacmanPos();
+    }
+    
+    public Labyrinth GetLabyrinth(){
+        return _labyrinth;
+    }
     
     public void AddPacman(/*Player player*/){
         

@@ -12,19 +12,14 @@ import Enums.RuleResultType;
  *
  * @author August
  */
-public class PacmanWallRule implements IRule{
+public class NothingRule implements IRule{
 
-    public PacmanWallRule(){
+    public NothingRule(){
         
     }
     @Override
     public RuleResultType checkRule(CellObjectType passiveObject, CellObjectType activeObject) {
-        RuleResultType result = RuleResultType.SavePositions;
-        
-        if (activeObject == CellObjectType.PacmanObject)
-            result = RuleResultType.SavePositions;
-        
-        return result;
+        return RuleResultType.OldDestroyed;
     }
     
 }

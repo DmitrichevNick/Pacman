@@ -20,6 +20,11 @@ public class Mover {
     private JudgeMaker _judgeMaker;
     private Labyrinth _labyrinth;
     
+    public Mover(Labyrinth labyrinth, JudgeMaker judgeMaker){
+        _labyrinth = labyrinth;
+        _judgeMaker = judgeMaker;
+    }
+    
     public void MovePacman(int idPacman, MoveType direction){
         Pair position= _labyrinth.GetPosition(idPacman);
         Pair nextPosition = null;
