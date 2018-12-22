@@ -12,6 +12,8 @@ package Enums;
 public enum RuleResultType 
 {
     SavePositions,
+    PassiveBack,
     OldDestroyed, 
-    NewDestroyed 
+    NewDestroyed,
+    NoRule
 }

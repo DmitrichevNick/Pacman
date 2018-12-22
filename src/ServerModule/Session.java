@@ -5,45 +5,59 @@
  */
 package ServerModule;
 
+import Enums.CellObjectType;
+import MapModule.CreatureCellObject;
+import MapModule.IChangeable;
 import MapModule.Map;
 import java.util.ArrayList;
+import java.util.UUID;
+import javafx.util.Pair;
 
 /**
  *
  * @author August
  */
 public class Session {
-    private int _lastPlayerId;
     private Map _map;
-    private ArrayList<Player> _players;
     private String _name;
+    private ArrayList<Player> _players;
+    private ArrayList<CreatureCellObject> _ghosts;
     
     public Session(String name){
         _map = new Map();
-        _lastPlayerId = 1;
         _name = name;
-        _players = new ArrayList<Player>();
+        _players = new ArrayList<>();
+        _ghosts= new ArrayList<>();
+    }
+    
+    public void Update(){
+        _map.Refresh();
     }
     
     public ArrayList<Player> GetPlayers(){
         return _players;
     }
     
+    public ArrayList<CreatureCellObject> GetGhosts(){
+        return _ghosts;
+    }
+    
     public Map GetMap(){
         return _map;
     }
+
     
-    private int MakeNextId(){
-        int oldId = _lastPlayerId;
-        _lastPlayerId++;
-        return oldId;
-    }
-    
-    public void AddPlayer(){
-        Player player = new Player(MakeNextId(),_map.getDefaultPacmanPos());
+    public void AddPlayer(UUID id){        
+        Player player = new Player(id,_map.getDefaultPacmanPos());
         _players.add(player);
-        _map.AddPacman();
-        // в мапу добавить пакмана
+        _map.AddPacman(player);
     }
     
+    public void AddGhost(UUID id){        
+        CreatureCellObject ghost = new CreatureCellObject(CellObjectType.GhostObject);
+        ghost.SetId(id);
+        ghost.SetPosition(new Pair(3,3));
+        _ghosts.add(ghost);
+        _map.AddGhost(ghost);
+    } 
 }

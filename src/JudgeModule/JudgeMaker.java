@@ -14,35 +14,34 @@ import java.util.ArrayList;
  * @author August
  */
 public class JudgeMaker {
-    private ArrayList<IRule> _rules;
+    private ArrayList<Rule> _rules;
     
-    public void JudgeMaker(){
-        _rules.add(new PacmanWallRule());
-        _rules.add(new NothingRule());
-    }
-    
-    public void AddRule(IRule rule){
-        _rules.add(rule);
-    }
-    
-    public void RemoveRule(IRule rule){
-        _rules.remove(rule);
-    }
-    
-    public void ClearRules(){
-        _rules.clear();
-    }
-    
-    public RuleResultType CheckRules(CellObjectType passiveCell, CellObjectType activeCell){
-        RuleResultType result = RuleResultType.SavePositions;
+    public JudgeMaker(){
+        _rules = new ArrayList<Rule>();
         
-        if (_rules.contains(new PacmanGhostRule()) && (passiveCell == CellObjectType.GhostObject && activeCell == CellObjectType.PacmanObject ||
-                passiveCell == CellObjectType.PacmanObject && activeCell == CellObjectType.GhostObject))
-            result = (new PacmanGhostRule()).checkRule(passiveCell, activeCell);
-        else if (_rules.contains(new PacmanGhostRule()) && (passiveCell == CellObjectType.GhostObject && activeCell == CellObjectType.PacmanObject ||
-                passiveCell == CellObjectType.PacmanObject && activeCell == CellObjectType.GhostObject))
-            result = (new PacmanWallRule()).checkRule(passiveCell, activeCell);
+        _rules.add(new Rule(CellObjectType.EmptyCellObject, CellObjectType.PacmanObject, RuleResultType.PassiveBack));
+        _rules.add(new Rule(CellObjectType.EmptyCellObject, CellObjectType.GhostObject, RuleResultType.PassiveBack));
         
-        return result;
+        _rules.add(new Rule(CellObjectType.WallObject, CellObjectType.PacmanObject,RuleResultType.SavePositions));
+        _rules.add(new Rule(CellObjectType.WallObject, CellObjectType.GhostObject,RuleResultType.SavePositions));
+        
+        _rules.add(new Rule(CellObjectType.PacmanObject, CellObjectType.GhostObject,RuleResultType.OldDestroyed));
+        
+        _rules.add(new Rule(CellObjectType.GhostObject, CellObjectType.PacmanObject,RuleResultType.NewDestroyed));
+        
+        _rules.add(new Rule(CellObjectType.FoodObject, CellObjectType.PacmanObject,RuleResultType.OldDestroyed));
+        _rules.add(new Rule(CellObjectType.FoodObject, CellObjectType.GhostObject,RuleResultType.PassiveBack));
+    }
+    
+    public RuleResultType CheckRules(CellObjectType passive, CellObjectType active){
+        for(int i = 0; i < _rules.size(); i++){
+            if(_rules.get(i).IsMakeable(passive, active)){
+                if(_rules.get(i).GetRuleResult()==RuleResultType.NoRule)
+                    continue;
+                
+                return _rules.get(i).GetRuleResult();     
+            }
+        }
+        return RuleResultType.NoRule;
     }
 }

@@ -7,6 +7,7 @@ package MapModule;
 
 import Enums.CellObjectType;
 import java.util.ArrayList;
+import java.util.UUID;
 import javafx.util.Pair;
 
 /**
@@ -20,7 +21,7 @@ public class Labyrinth {
     private CellObject[][] _objectsMatrix;
     private ArrayList<CellObject> _activeObjects;
     
-    // Деволтная фигня. Квадрат 20 на 20
+    // Дефолтная фигня. Квадрат 20 на 20
     public Labyrinth(){
         _width = 20;
         _height = 20;
@@ -56,17 +57,17 @@ public class Labyrinth {
         return _objectsMatrix[(int)position.getKey()][(int)position.getValue()]; 
     }
     
-    public Pair GetPosition(int id){
+    public Pair GetPosition(UUID id){
         for(int i = 0 ; i < _objectsMatrix.length; i++){
             for (int j = 0; j < _objectsMatrix[0].length; j++){
                 if(_objectsMatrix[i][j].GetCellObjectType()==CellObjectType.PacmanObject){
-                    PacmanCellObject pacman = (PacmanCellObject)_objectsMatrix[i][j];
-                    if(pacman.GetOwnerId()==id){
+                    CreatureCellObject pacman = (CreatureCellObject)_objectsMatrix[i][j];
+                    if(pacman.GetId()==id){
                         return new Pair(i,j);
                     }
                 } 
                 else if (_objectsMatrix[i][j].GetCellObjectType()==CellObjectType.GhostObject){
-                    GhostCellObject ghost = (GhostCellObject)_objectsMatrix[i][j];
+                    CreatureCellObject ghost = (CreatureCellObject)_objectsMatrix[i][j];
                     if(ghost.GetId()==id){
                         return new Pair(i,j);
                     }

@@ -6,6 +6,8 @@
 package MoverModule;
 
 import Enums.MoveType;
+import MapModule.CreatureCellObject;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,8 +16,10 @@ import Enums.MoveType;
 public class RunAwayAlgorithm implements IAlgorithm{
 
     @Override
-    public MoveType CalcNextMove() {
+    public MoveType CalcNextMove(ArrayList<CreatureCellObject> activeObjects) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+
     
 }

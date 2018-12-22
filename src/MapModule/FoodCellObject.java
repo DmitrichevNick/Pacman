@@ -7,12 +7,15 @@ package MapModule;
 
 import Enums.CellObjectType;
 import Enums.FoodType;
+import Enums.MoveType;
+import javafx.util.Pair;
 
 /**
  *
  * @author August
  */
-public class FoodCellObject extends CellObject {
+public class FoodCellObject extends CellObject implements IChangeable {
+    private Pair _position;
     private FoodType _foodType;
     
     public FoodCellObject(){
@@ -31,6 +34,21 @@ public class FoodCellObject extends CellObject {
     
     public FoodType GetFoodType(){
         return _foodType;
+    }
+
+    @Override
+    public Pair GetPosition() {
+        return _position;
+    }
+
+    @Override
+    public void SetPosition(Pair position) {
+       _position = position;
+    }
+
+    @Override
+    public CellObject GetCellObject() {
+        return this;
     }
     
 }

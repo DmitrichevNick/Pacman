@@ -1,11 +1,22 @@
-
 import Enums.CellObjectType;
+import Enums.MoveType;
+import MapModule.CreatureCellObject;
 import MapModule.Labyrinth;
 import MapModule.Map;
 import ServerModule.Player;
 import ServerModule.Session;
 import java.util.ArrayList;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.util.Duration;
 import javafx.util.Pair;
+import javax.swing.Timer;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,11 +33,13 @@ public class TestFrame extends javax.swing.JFrame {
     /**
      * Creates new form TestFrame
      */
-    public TestFrame() {
+    public TestFrame() throws InterruptedException {
         initComponents();
         _session = new Session("TEST");
-        _session.AddPlayer();
+        _session.AddPlayer(UUID.randomUUID());
+        _session.AddGhost(UUID.randomUUID());   
         UpdateField();
+        _session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.TopMove);
     }
 
     /**
@@ -41,22 +54,37 @@ public class TestFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jScrollPane1.setViewportView(jTextPane1);
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 772, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(39, 39, 39))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -73,6 +101,25 @@ public class TestFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       Task<Void> task = new Task<Void>() {
+                @Override
+                public Void call() throws Exception {
+                     Thread.sleep(1000);
+                     Uppp();
+                    return null ;
+                }
+            };
+            //task.messageProperty().addListener((obs, oldMessage, newMessage) -> labelUp.setText(newMessage));
+//в идеале нужно labelDw значением pair.value. 
+//            task.messageProperty().addListener((obs, oldMessage, newMessage) -> labelDw.setText(newMessage)); 
+            new Thread(task).start();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void Uppp(){
+        _session.Update();
+        UpdateField();
+    }
     private Session _session;
     /**
      * @param args the command line arguments
@@ -104,7 +151,13 @@ public class TestFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TestFrame().setVisible(true);               
+                try {               
+                    TestFrame frame = new TestFrame();
+                    frame.setVisible(true);                    
+                                  
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(TestFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -114,10 +167,12 @@ public class TestFrame extends javax.swing.JFrame {
         Labyrinth labyrinth = map.GetLabyrinth();
         jTextPane1.setText("");
         ArrayList<Player> players = _session.GetPlayers();
+        ArrayList<CreatureCellObject> ghosts = _session.GetGhosts();
         String field = new String();
         for(int i = 0; i< 20;i++){
             for(int j = 0; j<20; j++){
                 boolean isPlayerTime=false;
+                boolean isGhostTime =false;
                 for (int k =0;k<players.size();k++){
                     Player player= players.get(k);
                     if((int)player.GetPosition().getKey()==i && (int)player.GetPosition().getValue()==j){
@@ -125,8 +180,17 @@ public class TestFrame extends javax.swing.JFrame {
                         break;
                     }
                 }
+                for (int k =0;k<ghosts.size();k++){
+                    CreatureCellObject player= ghosts.get(k);
+                    if((int)player.GetPosition().getKey()==i && (int)player.GetPosition().getValue()==j){
+                        isGhostTime = true;
+                        break;
+                    }
+                }
                 if(isPlayerTime)
                     field+=2;
+                else if(isGhostTime)
+                    field+=3;
                 else
                     field +=labyrinth.GetCell(new Pair(i,j)).GetCellObjectType()==CellObjectType.WallObject?1:0;
                 isPlayerTime = false;
@@ -138,6 +202,7 @@ public class TestFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane jTextPane1;

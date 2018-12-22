@@ -19,7 +19,10 @@ public class NothingRule implements IRule{
     }
     @Override
     public RuleResultType checkRule(CellObjectType passiveObject, CellObjectType activeObject) {
-        return RuleResultType.OldDestroyed;
+        if(passiveObject==CellObjectType.EmptyCellObject)
+            return RuleResultType.OldDestroyed;
+        
+        return RuleResultType.NoRule;
     }
     
 }

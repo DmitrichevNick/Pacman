@@ -5,7 +5,9 @@
  */
 package ServerModule;
 
-import MapModule.PacmanCellObject;
+import Enums.CellObjectType;
+import MapModule.CreatureCellObject;
+import java.util.UUID;
 import javafx.util.Pair;
 
 /**
@@ -13,15 +15,19 @@ import javafx.util.Pair;
  * @author August
  */
 public class Player {
-    private int _id;
-    private PacmanCellObject _pacman;
+    private CreatureCellObject _creatureCellObject;
     
-    public Player(int id, Pair position){
-        _id = id;
-        _pacman = new PacmanCellObject(id, position);
+    public Player(UUID id, Pair position){
+        _creatureCellObject = new CreatureCellObject(CellObjectType.PacmanObject);
+        _creatureCellObject.SetId(id);
+        _creatureCellObject.SetPosition(position);
     }
     
     public Pair GetPosition(){
-        return _pacman.GetPosition();
+        return _creatureCellObject.GetPosition();
+    }
+    
+    public CreatureCellObject GetPacman(){
+        return _creatureCellObject;
     }
 }

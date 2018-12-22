@@ -6,11 +6,13 @@
 package MoverModule;
 
 import Enums.MoveType;
+import MapModule.CreatureCellObject;
+import java.util.ArrayList;
 
 /**
  *
  * @author August
  */
 public interface IAlgorithm {
-    MoveType CalcNextMove(/*Labyrinth labyrinth*/);
+    MoveType CalcNextMove(ArrayList<CreatureCellObject> activeObjects);
 }
