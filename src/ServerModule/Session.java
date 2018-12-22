@@ -56,7 +56,7 @@ public class Session {
     public void AddGhost(UUID id){        
         CreatureCellObject ghost = new CreatureCellObject(CellObjectType.GhostObject);
         ghost.SetId(id);
-        ghost.SetPosition(new Pair(3,3));
+        ghost.SetPosition(new Pair(9,10));
         _ghosts.add(ghost);
         _map.AddGhost(ghost);
     } 

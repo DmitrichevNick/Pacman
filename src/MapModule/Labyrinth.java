@@ -34,6 +34,15 @@ public class Labyrinth {
             }
         }
         
+        for(int i = 4; i < 8; i++){
+                _objectsMatrix[i][3] = new WallCellObject();
+                _objectsMatrix[i][6] = new WallCellObject();
+        }
+        for(int i = 3; i < 7; i++){
+                _objectsMatrix[4][i] = new WallCellObject();
+                _objectsMatrix[8][i] = new WallCellObject();
+        }
+        
         for (int i = 0; i < _width; i++){
             _objectsMatrix[i][0] = new WallCellObject();
             _objectsMatrix[i][_height-1] = new WallCellObject();

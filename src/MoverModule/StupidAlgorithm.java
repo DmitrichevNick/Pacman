@@ -25,9 +25,11 @@ public class StupidAlgorithm implements IAlgorithm{
         _layrinth = labyrinth;
     }
     
+    @Override
     public void SetMovingObject(CreatureCellObject creatureCellObject){
         _creatureCellObject = creatureCellObject;
     } 
+    
     @Override
     public MoveType CalcNextMove(ArrayList<CreatureCellObject> activeObjects) {
         ArrayList<MoveType> dirs = new ArrayList<MoveType>();

@@ -18,6 +18,8 @@ import javafx.concurrent.Task;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import java.util.Timer;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -40,9 +42,11 @@ public class TestFrame extends javax.swing.JFrame {
         _updater = new Updater(this);
         _session = new Session("TEST");
         _session.AddPlayer(UUID.randomUUID());
-        _session.AddGhost(UUID.randomUUID());   
+        _session.AddGhost(UUID.randomUUID());
+        _session.AddGhost(UUID.randomUUID());  
         UpdateField();
-        _session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.TopMove);
+        //_session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.TopMove);
+        
     }
 
     /**
@@ -61,6 +65,11 @@ public class TestFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTextPane1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextPane1KeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTextPane1);
 
         jButton1.setText("jButton1");
@@ -107,6 +116,23 @@ public class TestFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        Uppp();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextPane1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextPane1KeyPressed
+        switch (evt.getExtendedKeyCode()) {
+            case 37:
+                _session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.LeftMove);
+                break;
+            case 38:
+                _session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.TopMove);
+                break;
+            case 39:
+                _session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.RightMove);
+                break;
+            case 40:
+                _session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.BottomMove);
+                break;
+        }
+    }//GEN-LAST:event_jTextPane1KeyPressed
 
     public void Uppp(){
         _session.Update();
