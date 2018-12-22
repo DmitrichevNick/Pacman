@@ -23,12 +23,14 @@ public class Mover {
     private JudgeMaker _judgeMaker;
     private Labyrinth _labyrinth;
     private PacmanAlgorithm _pacmanAlgorithm;
+    private StupidAlgorithm _stupidAlgorithm;
     
     public Mover(Labyrinth labyrinth, JudgeMaker judgeMaker){
         _labyrinth = labyrinth;
         _judgeMaker = judgeMaker;
         
         _pacmanAlgorithm = new PacmanAlgorithm(labyrinth);
+        _stupidAlgorithm = new StupidAlgorithm(labyrinth);
     }
     
     private void MovePacmans(ArrayList<CellObject> pacmans){
@@ -76,42 +78,53 @@ public class Mover {
         }
     }
     
+    private void MoveGhosts(ArrayList<CellObject> ghosts){
+        for (int i = 0; i < ghosts.size(); i++){
+            if(ghosts.get(i).GetCellObjectType()==CellObjectType.GhostObject){
+                CreatureCellObject ghost = (CreatureCellObject)ghosts.get(i);
+                _stupidAlgorithm.SetMovingObject(ghost);
+                MoveType nextMove = _stupidAlgorithm.CalcNextMove(null);
+                Pair neighbour = new Pair(0,0);
+                RuleResultType ruleResult = RuleResultType.NoRule;
+                switch (nextMove){
+                    case NoMove:
+                        break;
+                    case TopMove:
+                        neighbour = new Pair(((int)ghost.GetPosition().getKey())-1,ghost.GetPosition().getValue());
+                        ruleResult = _judgeMaker.CheckRules(_labyrinth.GetCell(neighbour).GetCellObjectType(),CellObjectType.PacmanObject);  
+                        break;
+                    case BottomMove:
+                        neighbour = new Pair(((int)ghost.GetPosition().getKey())+1,ghost.GetPosition().getValue());
+                        ruleResult = _judgeMaker.CheckRules(_labyrinth.GetCell(neighbour).GetCellObjectType(),CellObjectType.PacmanObject);                       
+                        break;
+                    case LeftMove:
+                        neighbour = new Pair(ghost.GetPosition().getKey(),(int)(ghost.GetPosition().getValue())-1);
+                        ruleResult = _judgeMaker.CheckRules(_labyrinth.GetCell(neighbour).GetCellObjectType(),CellObjectType.PacmanObject);                       
+                        break;
+                    case RightMove:
+                        neighbour = new Pair(ghost.GetPosition().getKey(),(int)(ghost.GetPosition().getValue())+1);
+                        ruleResult = _judgeMaker.CheckRules(_labyrinth.GetCell(neighbour).GetCellObjectType(),CellObjectType.PacmanObject);                       
+                        break;
+                }
+                if (ruleResult==RuleResultType.SavePositions){
+                    continue;
+                }
+                else if (ruleResult == RuleResultType.OldDestroyed){
+                    ghost.SetPosition(neighbour);
+                }
+                else if (ruleResult == RuleResultType.PassiveBack){
+                    ghost.SetPosition(neighbour);
+                }
+                else if(ruleResult == RuleResultType.NewDestroyed){
+                    //FUCK
+                }
+                continue;
+            }
+        }
+    }
+    
     public void MoveAll(ArrayList<CellObject> objects){
         MovePacmans(objects);
-    }
-    
-    private void MoveGhosts(ArrayList<CellObject> ghosts){
-        
-    }
-    
-    public void MovePacman(UUID idPacman, MoveType direction){
-        Pair position= _labyrinth.GetPosition(idPacman);
-        Pair nextPosition = null;
-        switch (direction){
-            case LeftMove:
-                nextPosition = new Pair((int)position.getKey(),((int)position.getValue())-1);
-                break;
-            case RightMove:
-                nextPosition = new Pair((int)position.getKey(),((int)position.getValue())+1);
-                break;
-            case TopMove:
-                nextPosition = new Pair(((int)position.getKey())-1,position.getValue());
-                break;
-            case BottomMove:
-                nextPosition = new Pair(((int)position.getKey())+1,position.getValue());
-                break;
-        }
-        
-        CellObject nextCell = _labyrinth.GetCell(nextPosition);
-        
-        RuleResultType res = _judgeMaker.CheckRules(CellObjectType.PacmanObject, nextCell.GetCellObjectType());
-        
-        switch (res){
-            //case Old
-        }
-    }
-    
-    public void MoveGhost(){
-        // TODO
+        MoveGhosts(objects);
     }
 }

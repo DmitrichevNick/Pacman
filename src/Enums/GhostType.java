@@ -11,6 +11,7 @@ package Enums;
  */
 public enum GhostType 
 {
+    StupidGhost,
     RedGhost,
     BlueGhost,
     GreenGhost,

@@ -6,6 +6,7 @@ import MapModule.Map;
 import ServerModule.Player;
 import ServerModule.Session;
 import java.util.ArrayList;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -16,7 +17,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.util.Duration;
 import javafx.util.Pair;
-import javax.swing.Timer;
+import java.util.Timer;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,11 +31,13 @@ import javax.swing.Timer;
  */
 public class TestFrame extends javax.swing.JFrame {
 
+    private static Updater _updater;
     /**
      * Creates new form TestFrame
      */
     public TestFrame() throws InterruptedException {
         initComponents();
+        _updater = new Updater(this);
         _session = new Session("TEST");
         _session.AddPlayer(UUID.randomUUID());
         _session.AddGhost(UUID.randomUUID());   
@@ -102,21 +105,10 @@ public class TestFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       Task<Void> task = new Task<Void>() {
-                @Override
-                public Void call() throws Exception {
-                     Thread.sleep(1000);
-                     Uppp();
-                    return null ;
-                }
-            };
-            //task.messageProperty().addListener((obs, oldMessage, newMessage) -> labelUp.setText(newMessage));
-//в идеале нужно labelDw значением pair.value. 
-//            task.messageProperty().addListener((obs, oldMessage, newMessage) -> labelDw.setText(newMessage)); 
-            new Thread(task).start();
+       Uppp();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void Uppp(){
+    public void Uppp(){
         _session.Update();
         UpdateField();
     }
@@ -153,8 +145,7 @@ public class TestFrame extends javax.swing.JFrame {
             public void run() {
                 try {               
                     TestFrame frame = new TestFrame();
-                    frame.setVisible(true);                    
-                                  
+                    frame.setVisible(true);                                      
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TestFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
