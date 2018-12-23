@@ -8,7 +8,9 @@ package ServerModule;
 import Enums.CellObjectType;
 import MapModule.CreatureCellObject;
 import MapModule.IChangeable;
+import MapModule.Labyrinth;
 import MapModule.Map;
+import MapModule.Position;
 import java.util.ArrayList;
 import java.util.UUID;
 import javafx.util.Pair;
@@ -34,6 +36,13 @@ public class Session {
         _map.Refresh();
     }
     
+    // Is for send to client
+    public Labyrinth GetLabyrinth(){
+        return _map.GetLabyrinth();
+    }
+    
+    
+    
     public ArrayList<Player> GetPlayers(){
         return _players;
     }
@@ -56,7 +65,7 @@ public class Session {
     public void AddGhost(UUID id){        
         CreatureCellObject ghost = new CreatureCellObject(CellObjectType.GhostObject);
         ghost.SetId(id);
-        ghost.SetPosition(new Pair(3,3));
+        ghost.SetPosition(new Position(9,10));
         _ghosts.add(ghost);
         _map.AddGhost(ghost);
     } 

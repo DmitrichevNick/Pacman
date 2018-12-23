@@ -7,6 +7,7 @@ package ServerModule;
 
 import Enums.CellObjectType;
 import MapModule.CreatureCellObject;
+import MapModule.Position;
 import java.util.UUID;
 import javafx.util.Pair;
 
@@ -17,13 +18,13 @@ import javafx.util.Pair;
 public class Player {
     private CreatureCellObject _creatureCellObject;
     
-    public Player(UUID id, Pair position){
+    public Player(UUID id, Position position){
         _creatureCellObject = new CreatureCellObject(CellObjectType.PacmanObject);
         _creatureCellObject.SetId(id);
         _creatureCellObject.SetPosition(position);
     }
     
-    public Pair GetPosition(){
+    public Position GetPosition(){
         return _creatureCellObject.GetPosition();
     }
     

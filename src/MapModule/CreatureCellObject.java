@@ -6,29 +6,52 @@
 package MapModule;
 
 import Enums.CellObjectType;
+import Enums.CreatureType;
 import Enums.MoveType;
 import java.util.UUID;
-import javafx.util.Pair;
 
 /**
  *
  * @author August
  */
 public class CreatureCellObject extends CellObject implements IChangeable{
-    private Pair _position;
+    private boolean _isDead;
+    private CreatureType _creatureType;
+    private Position _position;
     private UUID _uuid; 
     private MoveType _currentDir;
     private MoveType _nextDir;
     
     public CreatureCellObject(CellObjectType cellObjectType){
+        _isDead= false;
         super.SetCellObjectType(cellObjectType);
         _currentDir = MoveType.NoMove;
         _nextDir = MoveType.NoMove;
         
         if(cellObjectType == CellObjectType.GhostObject){
             _uuid = UUID.randomUUID();
+            _creatureType = CreatureType.StupidGhost;
+        }
+        else if (cellObjectType == CellObjectType.PacmanObject){
+            _creatureType = CreatureType.CommonPacman;
         }
     } 
+    
+    public void SetDeadStatus(boolean dead){
+        _isDead = dead;
+    }
+    
+    public boolean GetDeadStatus(){
+        return _isDead;
+    }
+    
+    public void SetCreatureType(CreatureType creatureType){
+        _creatureType = creatureType;
+    }
+    
+    public CreatureType GetCreatureType(){
+        return _creatureType;
+    }
     
     public UUID GetId(){
         return _uuid;
@@ -41,12 +64,12 @@ public class CreatureCellObject extends CellObject implements IChangeable{
     }
     
     @Override
-    public Pair GetPosition() {
+    public Position GetPosition() {
         return _position;
     }
 
     @Override
-    public void SetPosition(Pair position) {
+    public void SetPosition(Position position) {
         _position = position;
     }
 

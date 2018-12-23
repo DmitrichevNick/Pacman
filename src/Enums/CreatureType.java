@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MapModule;
+package Enums;
 
 /**
  *
  * @author August
  */
-public interface IChangeable {
-    Position GetPosition();
-    void SetPosition(Position position);
-    CellObject GetCellObject();
+public enum CreatureType {
+    StupidGhost,
+    RedGhost,
+    CommonPacman
 }

@@ -15,4 +15,5 @@ import java.util.ArrayList;
  */
 public interface IAlgorithm {
     MoveType CalcNextMove(ArrayList<CreatureCellObject> activeObjects);
+    void SetMovingObject(CreatureCellObject creatureCellObject);
 }

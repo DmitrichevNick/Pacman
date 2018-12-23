@@ -3,20 +3,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/EmptyCellObject.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/CellObjectType.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/GhostType.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MoverModule/PacmanAlgorithm.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/FoodCellObject.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MoverModule/StupidAlgorithm.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/nbproject/build-impl.xml</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/PacmanCellObject.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/FoodType.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MoverModule/IAlgorithm.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/CreatureType.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/ServerModule/Session.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/CreatureCellObject.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/WallCellObject.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/GhostCellObject.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/MoveType.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MoverModule/RunAwayAlgorithm.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/Position.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/JudgeModule/Rule.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MoverModule/RedAlgorithm.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/pacmansolution/PacmanSolution.java</file>
@@ -29,6 +33,7 @@
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/CellObject.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/JudgeModule/PacmanGhostRule.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Enums/RuleResultType.java</file>
+            <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/Updater.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/TestFrame.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/JudgeModule/JudgeMaker.java</file>
             <file>file:/D:/GitSolutions/pacmansolution/Pacman/src/MapModule/Labyrinth.java</file>

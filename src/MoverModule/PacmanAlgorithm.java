@@ -22,6 +22,7 @@ public class PacmanAlgorithm implements IAlgorithm{
         _layrinth = labyrinth;
     }
     
+    @Override
     public void SetMovingObject(CreatureCellObject creatureCellObject){
         _creatureCellObject = creatureCellObject;
     } 

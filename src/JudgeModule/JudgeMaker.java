@@ -26,8 +26,10 @@ public class JudgeMaker {
         _rules.add(new Rule(CellObjectType.WallObject, CellObjectType.GhostObject,RuleResultType.SavePositions));
         
         _rules.add(new Rule(CellObjectType.PacmanObject, CellObjectType.GhostObject,RuleResultType.OldDestroyed));
+        _rules.add(new Rule(CellObjectType.PacmanObject, CellObjectType.EmptyCellObject,RuleResultType.PassiveBack));
         
         _rules.add(new Rule(CellObjectType.GhostObject, CellObjectType.PacmanObject,RuleResultType.NewDestroyed));
+        _rules.add(new Rule(CellObjectType.GhostObject, CellObjectType.EmptyCellObject,RuleResultType.PassiveBack));
         
         _rules.add(new Rule(CellObjectType.FoodObject, CellObjectType.PacmanObject,RuleResultType.OldDestroyed));
         _rules.add(new Rule(CellObjectType.FoodObject, CellObjectType.GhostObject,RuleResultType.PassiveBack));

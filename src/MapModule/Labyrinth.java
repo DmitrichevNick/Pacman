@@ -8,7 +8,6 @@ package MapModule;
 import Enums.CellObjectType;
 import java.util.ArrayList;
 import java.util.UUID;
-import javafx.util.Pair;
 
 /**
  *
@@ -17,63 +16,50 @@ import javafx.util.Pair;
 public class Labyrinth {
     private int _width;
     private int _height;
-    private Pair _defaultPacmanPosition;
+
     private CellObject[][] _objectsMatrix;
     private ArrayList<CellObject> _activeObjects;
     
+    public int GetWidth(){
+        return _width;
+    }
+    
+    public int GetHeight(){
+        return _height;
+    }
     // Дефолтная фигня. Квадрат 20 на 20
     public Labyrinth(){
         _width = 20;
-        _height = 20;
-        _objectsMatrix = new CellObject[_width][_height];
-        _defaultPacmanPosition = new Pair(10,10);
+        _height = 12;
+        _objectsMatrix = new CellObject[_height][_width];
         
-        for(int i = 0; i < _width; i++){
-            for (int j = 0; j < _height; j++){
-                _objectsMatrix[i][j] = new FoodCellObject();
+        // Делаю все пустым
+        for(int i = 0; i < _height; i++){
+            for (int j = 0; j < _width; j++){
+                _objectsMatrix[i][j] = new EmptyCellObject();
             }
         }
         
         for (int i = 0; i < _width; i++){
-            _objectsMatrix[i][0] = new WallCellObject();
-            _objectsMatrix[i][_height-1] = new WallCellObject();
+            _objectsMatrix[0][i] = new WallCellObject();
+            _objectsMatrix[_height-1][i] = new WallCellObject();
         }
         
         for (int i = 0; i < _height; i++){
-            _objectsMatrix[0][i] = new WallCellObject();
-            _objectsMatrix[_width-1][i] = new WallCellObject();
+            _objectsMatrix[i][0] = new WallCellObject();
+            _objectsMatrix[i][_width - 1] = new WallCellObject();
         }
     }
     
-    public Pair GetDefaultPacmanPos(){
-        return _defaultPacmanPosition;
+    public Position GetDefaultPacmanPos(){
+        return new Position(5,10);
     }
     
-    public void SetCell(Pair position, CellObject cellObject){
-        _objectsMatrix[(int)position.getKey()][(int)position.getValue()] = cellObject; 
+    public void SetCell(Position position, CellObject cellObject){
+        _objectsMatrix[position.GetY()][position.GetX()] = cellObject; 
     }
     
-    public CellObject GetCell(Pair position){
-        return _objectsMatrix[(int)position.getKey()][(int)position.getValue()]; 
-    }
-    
-    public Pair GetPosition(UUID id){
-        for(int i = 0 ; i < _objectsMatrix.length; i++){
-            for (int j = 0; j < _objectsMatrix[0].length; j++){
-                if(_objectsMatrix[i][j].GetCellObjectType()==CellObjectType.PacmanObject){
-                    CreatureCellObject pacman = (CreatureCellObject)_objectsMatrix[i][j];
-                    if(pacman.GetId()==id){
-                        return new Pair(i,j);
-                    }
-                } 
-                else if (_objectsMatrix[i][j].GetCellObjectType()==CellObjectType.GhostObject){
-                    CreatureCellObject ghost = (CreatureCellObject)_objectsMatrix[i][j];
-                    if(ghost.GetId()==id){
-                        return new Pair(i,j);
-                    }
-                }
-            }
-        }
-        return new Pair(null,null);
-    }   
+    public CellObject GetCell(Position position){
+        return _objectsMatrix[position.GetY()][position.GetX()]; 
+    }    
 }
