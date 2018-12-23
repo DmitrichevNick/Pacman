@@ -30,7 +30,7 @@ public class CreatureCellObject extends CellObject implements IChangeable{
         
         if(cellObjectType == CellObjectType.GhostObject){
             _uuid = UUID.randomUUID();
-            _creatureType = CreatureType.StupidGhost;
+            _creatureType = CreatureType.BlinkyGhost;
         }
         else if (cellObjectType == CellObjectType.PacmanObject){
             _creatureType = CreatureType.CommonPacman;
