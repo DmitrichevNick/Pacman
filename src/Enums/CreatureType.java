@@ -10,6 +10,10 @@ package Enums;
  * @author August
  */
 public enum CreatureType {
+    BlinkyGhost,
+    PinkyGhost,
+    InkyGhost,
+    ClydeGhost,
     StupidGhost,
     RedGhost,
     CommonPacman

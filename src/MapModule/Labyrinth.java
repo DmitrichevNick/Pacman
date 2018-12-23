@@ -29,8 +29,8 @@ public class Labyrinth {
     }
     // Дефолтная фигня. Квадрат 20 на 20
     public Labyrinth(){
-        _width = 20;
-        _height = 12;
+        _width = Enums.PacmansParameter.ROW_COUNT;
+        _height = Enums.PacmansParameter.COLUMN_COUNT;
         _objectsMatrix = new CellObject[_height][_width];
         
         // Делаю все пустым
