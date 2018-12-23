@@ -5,6 +5,7 @@
  */
 package MapModule;
 
+import Enums.CellObjectType;
 import JudgeModule.JudgeMaker;
 import MoverModule.Mover;
 import ServerModule.Player;
@@ -20,14 +21,29 @@ public class Map {
     private Mover _mover;
     private ArrayList<IChangeable> _activeCells;
     
+    
     public Map(){
         _labyrinth = new Labyrinth();
         JudgeMaker jm = new JudgeMaker();
         _mover = new Mover(_labyrinth,jm);
         _activeCells = new ArrayList<IChangeable>();
+        GenerateFood();
     }
     
-    public Pair getDefaultPacmanPos(){
+    private void GenerateFood(){
+        for (int i = 0; i < _labyrinth.GetHeight(); i++){
+            for (int j = 0; j < _labyrinth.GetWidth(); j++){
+                Position position = new Position(j,i);
+                if(_labyrinth.GetCell(position).GetCellObjectType()==CellObjectType.EmptyCellObject){
+                    FoodCellObject foodCell = new FoodCellObject();
+                    foodCell.SetPosition(position);
+                    _activeCells.add(foodCell);
+                }
+            }
+        }
+    }
+    
+    public Position getDefaultPacmanPos(){
         return _labyrinth.GetDefaultPacmanPos();
     }
     
@@ -40,7 +56,7 @@ public class Map {
         for(int  i =0; i< _activeCells.size();i++){
             objects.add(_activeCells.get(i).GetCellObject());
         }
-        _mover.MoveAll(objects);
+        _mover.MoveAll(_activeCells);
     }
     
     public Labyrinth GetLabyrinth(){

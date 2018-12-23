@@ -9,7 +9,6 @@ import Enums.CellObjectType;
 import Enums.CreatureType;
 import Enums.MoveType;
 import java.util.UUID;
-import javafx.util.Pair;
 
 /**
  *
@@ -18,7 +17,7 @@ import javafx.util.Pair;
 public class CreatureCellObject extends CellObject implements IChangeable{
     private boolean _isDead;
     private CreatureType _creatureType;
-    private Pair _position;
+    private Position _position;
     private UUID _uuid; 
     private MoveType _currentDir;
     private MoveType _nextDir;
@@ -65,12 +64,12 @@ public class CreatureCellObject extends CellObject implements IChangeable{
     }
     
     @Override
-    public Pair GetPosition() {
+    public Position GetPosition() {
         return _position;
     }
 
     @Override
-    public void SetPosition(Pair position) {
+    public void SetPosition(Position position) {
         _position = position;
     }
 

@@ -9,6 +9,7 @@ import Enums.CellObjectType;
 import Enums.MoveType;
 import MapModule.CreatureCellObject;
 import MapModule.Labyrinth;
+import MapModule.Position;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.util.Pair;
@@ -34,22 +35,22 @@ public class StupidAlgorithm implements IAlgorithm{
     public MoveType CalcNextMove(ArrayList<CreatureCellObject> activeObjects) {
         ArrayList<MoveType> dirs = new ArrayList<MoveType>();
         //TOP
-        Pair neighbour = new Pair((int)(_creatureCellObject.GetPosition().getKey())-1,_creatureCellObject.GetPosition().getValue());
+        Position neighbour = new Position(_creatureCellObject.GetPosition().GetX()-1,_creatureCellObject.GetPosition().GetY());
         if(_layrinth.GetCell(neighbour).GetCellObjectType()!=CellObjectType.WallObject){
             dirs.add(MoveType.TopMove);
         }
         //BOT
-        neighbour = new Pair((int)(_creatureCellObject.GetPosition().getKey())+1,_creatureCellObject.GetPosition().getValue());
+        neighbour = new Position(_creatureCellObject.GetPosition().GetX()+1,_creatureCellObject.GetPosition().GetY());
         if(_layrinth.GetCell(neighbour).GetCellObjectType()!=CellObjectType.WallObject){
             dirs.add(MoveType.BottomMove);
         }
         //LEFT
-        neighbour = new Pair(_creatureCellObject.GetPosition().getKey(),(int)(_creatureCellObject.GetPosition().getValue())-1);
+        neighbour = new Position(_creatureCellObject.GetPosition().GetX(),_creatureCellObject.GetPosition().GetY()-1);
         if(_layrinth.GetCell(neighbour).GetCellObjectType()!=CellObjectType.WallObject){
             dirs.add(MoveType.LeftMove);
         }
         //RIGHT
-        neighbour = new Pair(_creatureCellObject.GetPosition().getKey(),(int)(_creatureCellObject.GetPosition().getValue())+1);
+        neighbour = new Position(_creatureCellObject.GetPosition().GetX(),_creatureCellObject.GetPosition().GetY()+1);
         if(_layrinth.GetCell(neighbour).GetCellObjectType()!=CellObjectType.WallObject){
             dirs.add(MoveType.RightMove);
         }

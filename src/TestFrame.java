@@ -1,8 +1,11 @@
 import Enums.CellObjectType;
 import Enums.MoveType;
+import MapModule.CellObject;
 import MapModule.CreatureCellObject;
+import MapModule.IChangeable;
 import MapModule.Labyrinth;
 import MapModule.Map;
+import MapModule.Position;
 import ServerModule.Player;
 import ServerModule.Session;
 import java.util.ArrayList;
@@ -186,30 +189,50 @@ public class TestFrame extends javax.swing.JFrame {
         ArrayList<Player> players = _session.GetPlayers();
         ArrayList<CreatureCellObject> ghosts = _session.GetGhosts();
         String field = new String();
-        for(int i = 0; i< 20;i++){
-            for(int j = 0; j<20; j++){
+        for(int i = 0; i< labyrinth.GetHeight();i++){
+            for(int j = 0; j<labyrinth.GetWidth(); j++){
                 boolean isPlayerTime=false;
                 boolean isGhostTime =false;
                 for (int k =0;k<players.size();k++){
                     Player player= players.get(k);
-                    if((int)player.GetPosition().getKey()==i && (int)player.GetPosition().getValue()==j){
+                    if(player.GetPosition().GetX()==j && player.GetPosition().GetY()==i){
                         isPlayerTime = true;
                         break;
                     }
                 }
                 for (int k =0;k<ghosts.size();k++){
                     CreatureCellObject player= ghosts.get(k);
-                    if((int)player.GetPosition().getKey()==i && (int)player.GetPosition().getValue()==j){
+                    if(player.GetPosition().GetX()==j && player.GetPosition().GetY()==i){
                         isGhostTime = true;
                         break;
                     }
                 }
-                if(isPlayerTime)
-                    field+=2;
-                else if(isGhostTime)
-                    field+=3;
-                else
-                    field +=labyrinth.GetCell(new Pair(i,j)).GetCellObjectType()==CellObjectType.WallObject?1:0;
+                ArrayList<IChangeable> list = map.GetActiveObjects();
+                //ArrayList<IChangeable> listPos = new ArrayList<>();
+                int noFood = 0;
+                for (int k =0;k<list.size();k++){                   
+                    if(list.get(k).GetPosition().GetX()==j && list.get(k).GetPosition().GetY()==i){
+                        isPlayerTime=true;
+                        CellObject player= list.get(k).GetCellObject();
+                        if(player.GetCellObjectType()==CellObjectType.FoodObject)
+                            noFood = 5;
+                        if(player.GetCellObjectType()==CellObjectType.PacmanObject){
+                            noFood = 2;
+                        }
+                        if(player.GetCellObjectType()==CellObjectType.GhostObject)
+                            noFood = 3;
+                    }
+                }
+                if(noFood !=0 && noFood != 5){
+                    field +=noFood;
+                }
+                if(noFood == 5)
+                    field +=noFood;
+                if(!isPlayerTime){
+                    CellObject cell = labyrinth.GetCell(new Position(j,i));
+                    field +=cell.GetCellObjectType()==CellObjectType.WallObject?1:0;
+                }
+                    
                 isPlayerTime = false;
             }
             field+='\n';

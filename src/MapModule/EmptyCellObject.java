@@ -5,12 +5,14 @@
  */
 package MapModule;
 
+import Enums.CellObjectType;
+
 /**
  *
  * @author August
  */
-public interface IChangeable {
-    Position GetPosition();
-    void SetPosition(Position position);
-    CellObject GetCellObject();
+public class EmptyCellObject extends CellObject{
+    public EmptyCellObject(){
+        super.SetCellObjectType(CellObjectType.EmptyCellObject);
+    }
 }
