@@ -11,8 +11,11 @@ import MapModule.IChangeable;
 import MapModule.Labyrinth;
 import MapModule.Map;
 import MapModule.Position;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.util.Pair;
 
 /**
@@ -26,7 +29,11 @@ public class Session {
     private ArrayList<CreatureCellObject> _ghosts;
     
     public Session(String name){
-        _map = new Map();
+        try {
+            _map = new Map();
+        } catch (IOException ex) {
+            Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
+        }
         _name = name;
         _players = new ArrayList<>();
         _ghosts= new ArrayList<>();
@@ -57,15 +64,17 @@ public class Session {
 
     
     public void AddPlayer(UUID id){        
-        Player player = new Player(id,_map.getDefaultPacmanPos());
+        //Player player = new Player(id,_map.getDefaultPacmanPos());
+        Player player = new Player(id, new Position(28,1));
         _players.add(player);
         _map.AddPacman(player);
     }
     
+    
     public void AddGhost(UUID id){        
         CreatureCellObject ghost = new CreatureCellObject(CellObjectType.GhostObject);
         ghost.SetId(id);
-        ghost.SetPosition(new Position(9,10));
+        ghost.SetPosition(new Position(8,8));
         _ghosts.add(ghost);
         _map.AddGhost(ghost);
     } 

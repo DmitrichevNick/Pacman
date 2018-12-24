@@ -9,6 +9,7 @@ import Enums.CellObjectType;
 import JudgeModule.JudgeMaker;
 import MoverModule.Mover;
 import ServerModule.Player;
+import java.io.IOException;
 import java.util.ArrayList;
 import javafx.util.Pair;
 
@@ -22,8 +23,9 @@ public class Map {
     private ArrayList<IChangeable> _activeCells;
     
     
-    public Map(){
-        _labyrinth = new Labyrinth();
+    public Map() throws IOException{
+       // _labyrinth = new Labyrinth();
+        _labyrinth = new Labyrinth("C:\\Users\\August\\Desktop\\laby.txt");
         JudgeMaker jm = new JudgeMaker();
         _mover = new Mover(_labyrinth,jm);
         _activeCells = new ArrayList<IChangeable>();

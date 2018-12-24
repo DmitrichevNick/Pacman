@@ -6,8 +6,15 @@
 package MapModule;
 
 import Enums.CellObjectType;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -51,8 +58,44 @@ public class Labyrinth {
         }
     }
     
+    public Labyrinth(String path){
+        File file = new File(path); 
+  
+        BufferedReader br; 
+        try {
+            br = new BufferedReader(new FileReader(file));       
+
+            String st; 
+            st = br.readLine();
+            int height = Integer.parseInt(st.split(" ")[0]);
+            _height = height;
+            int width = Integer.parseInt(st.split(" ")[1]);
+            _width = width;
+
+            _objectsMatrix = new CellObject[height][width];
+
+            height = 0;
+            while ((st = br.readLine()) != null) {
+                for(int i = 0; i < width; i++){
+                    if(st.charAt(i)=='1')
+                        _objectsMatrix[height][i] = new WallCellObject();
+                    if(st.charAt(i)=='0')
+                        _objectsMatrix[height][i] = new EmptyCellObject();
+                }
+                height++;
+
+            } 
+        } 
+        catch (FileNotFoundException ex) {
+            Logger.getLogger(Labyrinth.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (IOException ex) {
+                Logger.getLogger(Labyrinth.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public Position GetDefaultPacmanPos(){
-        return new Position(5,10);
+        return new Position(18,18);
     }
     
     public void SetCell(Position position, CellObject cellObject){
