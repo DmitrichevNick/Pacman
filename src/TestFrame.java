@@ -45,8 +45,11 @@ public class TestFrame extends javax.swing.JFrame {
         _updater = new Updater(this);
         _session = new Session("TEST");
         _session.AddPlayer(UUID.randomUUID());
+        
+        _session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.LeftMove);
+        _session.AddPlayer(UUID.randomUUID());
         _session.AddGhost(UUID.randomUUID());
-        _session.AddGhost(UUID.randomUUID());  
+        //_session.AddGhost(UUID.randomUUID());  
         UpdateField();
         //_session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.TopMove);
         

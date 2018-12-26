@@ -25,6 +25,7 @@ public class Mover {
     private Labyrinth _labyrinth;
     private PacmanAlgorithm _pacmanAlgorithm;
     private StupidAlgorithm _stupidAlgorithm;
+    private RedAlgorithm _redAlgorithm;
     
     public Mover(Labyrinth labyrinth, JudgeMaker judgeMaker){
         _labyrinth = labyrinth;
@@ -32,6 +33,7 @@ public class Mover {
         
         _pacmanAlgorithm = new PacmanAlgorithm(labyrinth);
         _stupidAlgorithm = new StupidAlgorithm(labyrinth);
+        _redAlgorithm = new RedAlgorithm(labyrinth);
     }
     
     private IChangeable GetActiveNeighbour(Position position, ArrayList<IChangeable> creatures){
@@ -64,19 +66,19 @@ public class Mover {
                         break;
                     case TopMove:
                         neighbour = new Position(pacman.GetPosition().GetX(),pacman.GetPosition().GetY()-1);
-                        ruleResult = GetRuleResult(neighbour, pacmans);
+                        ruleResult = GetRuleResult(CellObjectType.PacmanObject, neighbour, pacmans);
                         break;
                     case BottomMove:
                         neighbour = new Position(pacman.GetPosition().GetX(),pacman.GetPosition().GetY()+1);
-                        ruleResult = GetRuleResult(neighbour, pacmans); 
+                        ruleResult = GetRuleResult(CellObjectType.PacmanObject, neighbour, pacmans); 
                         break;
                     case LeftMove:
                         neighbour = new Position(pacman.GetPosition().GetX()-1,pacman.GetPosition().GetY());
-                        ruleResult = GetRuleResult(neighbour, pacmans);                    
+                        ruleResult = GetRuleResult(CellObjectType.PacmanObject, neighbour, pacmans);                    
                         break;
                     case RightMove:
                         neighbour = new Position(pacman.GetPosition().GetX()+1, pacman.GetPosition().GetY());
-                        ruleResult = GetRuleResult(neighbour, pacmans);                     
+                        ruleResult = GetRuleResult(CellObjectType.PacmanObject, neighbour, pacmans);                     
                         break;
                 }
                 if (ruleResult==RuleResultType.SavePositions){
@@ -104,13 +106,14 @@ public class Mover {
         }
     }
     
-    private RuleResultType GetRuleResult(Position neighbour, ArrayList<IChangeable> pacmans){
+    private RuleResultType GetRuleResult(CellObjectType active, Position neighbour, ArrayList<IChangeable> objects){
         RuleResultType ruleResult = null;
-        IChangeable creature = GetActiveNeighbour(neighbour, pacmans);
+        
+        IChangeable creature = GetActiveNeighbour(neighbour, objects);
         if(creature!=null)
-            ruleResult = _judgeMaker.CheckRules(creature.GetCellObject().GetCellObjectType(),CellObjectType.PacmanObject);  
+            ruleResult = _judgeMaker.CheckRules(creature.GetCellObject().GetCellObjectType(),active);  
         else
-            ruleResult = _judgeMaker.CheckRules(_labyrinth.GetCell(neighbour).GetCellObjectType(),CellObjectType.PacmanObject); 
+            ruleResult = _judgeMaker.CheckRules(_labyrinth.GetCell(neighbour).GetCellObjectType(),active); 
         
         return ruleResult;
     }
@@ -125,18 +128,28 @@ public class Mover {
             case StupidGhost:
                 algorithm = _stupidAlgorithm;
                 break;
+            case BlinkyGhost:
+                algorithm = _redAlgorithm;
+                break;
         }
         
         return algorithm;
     }
     
     private void MoveGhosts(ArrayList<IChangeable> ghosts){
+        ArrayList<CreatureCellObject> pacmans = new ArrayList<>();
+        for (int i =0; i < ghosts.size();i++){
+            if(ghosts.get(i).GetCellObject().GetCellObjectType()==CellObjectType.PacmanObject){
+                pacmans.add((CreatureCellObject)ghosts.get(i).GetCellObject());
+            }
+        }
+        
         for (int i = 0; i < ghosts.size(); i++){
             if(ghosts.get(i).GetCellObject().GetCellObjectType()==CellObjectType.GhostObject){
                 CreatureCellObject ghost = (CreatureCellObject)ghosts.get(i);
                 IAlgorithm algorithm = AlgorithmMaker(ghost);
                 algorithm.SetMovingObject(ghost);
-                MoveType nextMove = algorithm.CalcNextMove(null);
+                MoveType nextMove = algorithm.CalcNextMove(pacmans);
                 Position neighbour = new Position(0,0);
                 CreatureCellObject creature= null;
                 RuleResultType ruleResult = RuleResultType.NoRule;
@@ -144,20 +157,20 @@ public class Mover {
                     case NoMove:
                         break;
                     case TopMove:
-                        neighbour = new Position(ghost.GetPosition().GetX()-1,ghost.GetPosition().GetY());
-                        ruleResult = GetRuleResult(neighbour, ghosts);
+                        neighbour = new Position(ghost.GetPosition().GetX(),ghost.GetPosition().GetY()-1);
+                        ruleResult = GetRuleResult(CellObjectType.GhostObject, neighbour, ghosts);
                         break;
                     case BottomMove:
-                        neighbour = new Position(ghost.GetPosition().GetX()+1,ghost.GetPosition().GetY());
-                        ruleResult = GetRuleResult(neighbour, ghosts); 
+                        neighbour = new Position(ghost.GetPosition().GetX(),ghost.GetPosition().GetY()+1);
+                        ruleResult = GetRuleResult(CellObjectType.GhostObject, neighbour, ghosts); 
                         break;
                     case LeftMove:
-                        neighbour = new Position(ghost.GetPosition().GetX(),ghost.GetPosition().GetY()-1);
-                        ruleResult = GetRuleResult(neighbour, ghosts);                     
+                        neighbour = new Position(ghost.GetPosition().GetX()-1,ghost.GetPosition().GetY());
+                        ruleResult = GetRuleResult(CellObjectType.GhostObject, neighbour, ghosts);                     
                         break;
                     case RightMove:
-                        neighbour = new Position(ghost.GetPosition().GetX(), ghost.GetPosition().GetY()+1);
-                        ruleResult = GetRuleResult(neighbour, ghosts);                     
+                        neighbour = new Position(ghost.GetPosition().GetX()+1, ghost.GetPosition().GetY());
+                        ruleResult = GetRuleResult(CellObjectType.GhostObject, neighbour, ghosts);                     
                         break;
                 }
                 if (ruleResult==RuleResultType.SavePositions){
@@ -168,7 +181,7 @@ public class Mover {
                         if(ghosts.get(j).GetCellObject().GetCellObjectType()!=CellObjectType.FoodObject){
                             CreatureCellObject obj = (CreatureCellObject)ghosts.get(j);
                             if(obj.GetCellObjectType()==CellObjectType.PacmanObject){
-                                if(obj.GetPosition()==neighbour){
+                                if(obj.GetPosition().GetX()==neighbour.GetX() && obj.GetPosition().GetY()==neighbour.GetY()){
                                     obj.SetDeadStatus(true);
                                 }
                             }    

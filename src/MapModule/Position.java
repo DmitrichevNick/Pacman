@@ -22,6 +22,7 @@ public class Position {
         _x = pos.GetX();
         _y = pos.GetY();
     }
+
     
     
     public int GetX(){
