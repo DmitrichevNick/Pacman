@@ -44,11 +44,11 @@ public class TestFrame extends javax.swing.JFrame {
         initComponents();
         _updater = new Updater(this);
         _session = new Session("TEST");
-        _session.AddPlayer(UUID.randomUUID());
+        //_session.AddPlayer(UUID.randomUUID());
         
         _session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.LeftMove);
-        _session.AddPlayer(UUID.randomUUID());
-        _session.AddGhost(UUID.randomUUID());
+        //_session.AddPlayer(UUID.randomUUID());
+        //_session.AddGhost();
         //_session.AddGhost(UUID.randomUUID());  
         UpdateField();
         //_session.GetPlayers().get(0).GetPacman().SetNextDir(MoveType.TopMove);
@@ -186,11 +186,18 @@ public class TestFrame extends javax.swing.JFrame {
     }
     
     private void UpdateField(){
-        Map map = _session.GetMap();
-        Labyrinth labyrinth = map.GetLabyrinth();
+        Labyrinth labyrinth = _session.GetLabyrinth();
         jTextPane1.setText("");
         ArrayList<Player> players = _session.GetPlayers();
-        ArrayList<CreatureCellObject> ghosts = _session.GetGhosts();
+        ArrayList<IChangeable> objects = _session.GetActiveObjects();
+        
+        ArrayList<CreatureCellObject> ghosts = new ArrayList<>();
+        for(IChangeable obj : objects){
+            if (obj.GetCellObject().GetCellObjectType()==CellObjectType.GhostObject){
+                CreatureCellObject ghost = (CreatureCellObject)obj.GetCellObject();
+                ghosts.add(ghost);
+            }
+        }
         String field = new String();
         for(int i = 0; i< labyrinth.GetHeight();i++){
             for(int j = 0; j<labyrinth.GetWidth(); j++){
@@ -210,7 +217,7 @@ public class TestFrame extends javax.swing.JFrame {
                         break;
                     }
                 }
-                ArrayList<IChangeable> list = map.GetActiveObjects();
+                ArrayList<IChangeable> list = _session.GetActiveObjects();
                 //ArrayList<IChangeable> listPos = new ArrayList<>();
                 int noFood = 0;
                 for (int k =0;k<list.size();k++){                   

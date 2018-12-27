@@ -35,9 +35,9 @@ public class Client extends Application{
         _session = new Session("Test");
         UUID idPlayer = UUID.randomUUID();
         UUID idGhost = UUID.randomUUID();
-        _session.AddPlayer(idPlayer);
-        _session.AddGhost(idPlayer);
-        _map = _session.GetMap();
+        //_session.AddPlayer(idPlayer);
+        //_session.AddGhost(idPlayer);
+        //_map = _session.GetMap();
 //_map = new Map();
         _labyrinth = _map.GetLabyrinth();
         _activeCells = _map.GetActiveObjects();

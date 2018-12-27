@@ -5,11 +5,13 @@
  */
 package MapModule;
 
+import java.io.Serializable;
+
 /**
  *
  * @author August
  */
-public class Position {
+public class Position implements Serializable{
     private int _x;
     private int _y;
     

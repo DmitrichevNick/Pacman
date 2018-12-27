@@ -24,6 +24,7 @@ public class Player {
         _creatureCellObject.SetPosition(position);
     }
     
+    
     public Position GetPosition(){
         return _creatureCellObject.GetPosition();
     }
