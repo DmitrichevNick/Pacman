@@ -6,12 +6,13 @@
 package MapModule;
 
 import Enums.CellObjectType;
+import java.io.Serializable;
 
 /**
  *
  * @author August
  */
-public class CellObject {
+public class CellObject implements Serializable{
     private CellObjectType _cellObjectType;
     
     public CellObject(){
