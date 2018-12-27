@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author August
  */
-public class Labyrinth {
+public class Labyrinth implements Serializable{
     private int _width;
     private int _height;
 

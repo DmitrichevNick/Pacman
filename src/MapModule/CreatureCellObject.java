@@ -14,7 +14,7 @@ import java.util.UUID;
  *
  * @author August
  */
-public class CreatureCellObject extends CellObject implements IChangeable{
+public class CreatureCellObject extends CellObject implements IChangeable {
     private boolean _isDead;
     private CreatureType _creatureType;
     private Position _position;
