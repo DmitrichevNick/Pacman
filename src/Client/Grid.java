@@ -5,10 +5,9 @@
  */
 package Client;
 
+import Enums.CellObjectType;
 import MapModule.IChangeable;
-import java.io.InputStream;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,15 +16,38 @@ import javafx.scene.image.ImageView;
 public class Grid {
 
     protected static CellView[][] grid;
+    private int _row = Enums.PacmansParameter.ROW_COUNT;
+    private int _column = Enums.PacmansParameter.COLUMN_COUNT;
 
     public Grid() {
-
-        grid = new CellView[Enums.PacmansParameter.ROW_COUNT][Enums.PacmansParameter.COLUMN_COUNT];
+        
+        grid = new CellView[_row][_column];
+    }
+ 
+    public Grid(int countRow, int countColumn) {
+        _row = countRow;
+        _column = countColumn;
+        grid = new CellView[_row][_column];
     }
 
     public static void addCell(CellView cell) {
-        grid[cell.position.GetX()][cell.position.GetY()] = cell;
-
+        grid[cell.position.GetY()][cell.position.GetX()] = cell;
+    }
+    
+    public static void delCell(int i, int j) {
+        grid[i][j] = null;
+    }
+        
+    public void ClearActiveObjectCell() {
+        for (int i = 0; i < _row; i++) 
+        {
+            for (int j = 0; j < _column; j++) 
+            {
+                if (grid[i][j].getType() !=  CellObjectType.WallObject && grid[i][j].getType() !=  CellObjectType.EmptyCellObject){
+                    delCell(i,j);
+                }
+            }
+        }
     }
 
     public static CellView getCell(int row, int column) {

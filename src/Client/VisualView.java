@@ -14,16 +14,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 /**
  *
@@ -36,6 +32,9 @@ public class VisualView{
     private Pane _infoPanel;
     private int _width;
     private int _height;
+    private int _countRow;
+    private int _countColumn;
+    private Client _app;
     
     private Image _imagePacman1;
     private Image _imageWall;
@@ -47,10 +46,13 @@ public class VisualView{
     private ArrayList<IChangeable> _objects;
         
     
-    public VisualView(Stage stage, Labyrinth labyrinth, ArrayList<IChangeable> objects){
+    public VisualView(Stage stage, Client app, Labyrinth labyrinth, ArrayList<IChangeable> objects){
+        _app = app;
+        _countRow = labyrinth.GetHeight();
+        _countColumn = labyrinth.GetWidth();
         _width = labyrinth.GetWidth()*40;
         _height = labyrinth.GetHeight()*40 + 100;
-        _grid = new Grid();
+        _grid = new Grid(_countRow, _countColumn);
         _root = new Pane();
         _root.setStyle("-fx-background-color: black");
         _objects = objects;
@@ -59,11 +61,11 @@ public class VisualView{
         
         setStartIcon();
         
-        for (int i = 0; i < Enums.PacmansParameter.ROW_COUNT; i++) {
-            for (int j = 0; j < Enums.PacmansParameter.COLUMN_COUNT; j++) {
-                Position currentPosition = new Position(i,j);
+        for (int i = 0; i < _countRow; i++) {
+            for (int j = 0; j < _countColumn; j++) {
+                Position currentPosition = new Position(j,i);
                 CellObjectType type = labyrinth.GetCell(currentPosition).GetCellObjectType();
-                CellView cell = new CellView(currentPosition);
+                CellView cell = new CellView(currentPosition, type);
             	_grid.addCell(cell);
                 switch (type) {
                     case WallObject:
@@ -74,8 +76,11 @@ public class VisualView{
                         break;
                 }
             }
-            Position currentPosition = new Position(i,Enums.PacmansParameter.COLUMN_COUNT);
-            CellView cell = new CellView(currentPosition);
+        }
+        
+        for (int i = 0; i < _countColumn; i++) {
+            Position currentPosition = new Position(i, _countRow);
+            CellView cell = new CellView(currentPosition, CellObjectType.EmptyCellObject);
             _root.getChildren().add(cell.getNode());
         }
         
@@ -88,10 +93,11 @@ public class VisualView{
 
             @Override
             public void handle(ActionEvent event) {
-                Rendering(_objects);
+                _app.UpdateActiveObject();
+                _objects = _app.getActiveObjects();
+                _app.getDataChange().DataIsChanged();
             }
         });
-
         refresh.setLayoutX(0);
         refresh.setLayoutY(0);
         _infoPanel.setLayoutX(0);
@@ -102,13 +108,15 @@ public class VisualView{
         stage.setTitle("PAC-MAN");
         stage.setScene(_scene);
         stage.show();
+        Rendering(_objects);
     }
-
+    
     public void Rendering(ArrayList<IChangeable> activeObject) {
+        _grid.ClearActiveObjectCell();
         for (IChangeable object : activeObject) {
             Position currentPosition = object.GetPosition();
             CellObjectType type = object.GetCellObject().GetCellObjectType();
-            CellView cell = new CellView(currentPosition);
+            CellView cell = new CellView(currentPosition, type);
             _grid.addCell(cell);
             switch (type) {
                 case PacmanObject:
@@ -161,5 +169,100 @@ public class VisualView{
         _imageGhostI = new Image(resGhostI);
         _imageGhostC = new Image(resGhostC);
         _imagePrimeFood = new Image(resPrimeFood);
+    }
+    
+    public Grid getGrid() {
+        return _grid;
+    }
+
+    public Pane getRoot() {
+        return _root;
+    }
+
+    public int getWidth() {
+        return _width;
+    }
+
+    public int getHeight() {
+        return _height;
+    }
+
+    public ArrayList<IChangeable> getActiveObjects() {
+        return _objects;
+    }
+
+    public Image getImagePacman1() {
+        return _imagePacman1;
+    }
+
+    public Image getImageWall() {
+        return _imageWall;
+    }
+
+    public Image getImageGhostB() {
+        return _imageGhostB;
+    }
+
+    public Image getImageGhostP() {
+        return _imageGhostP;
+    }
+
+    public Image getImageGhostI() {
+        return _imageGhostI;
+    }
+
+    public Image getImageGhostC() {
+        return _imageGhostC;
+    }
+
+    public Image getImagePrimeFood() {
+        return _imagePrimeFood;
+    }
+}
+
+// Интерфейс, который будет реализован всеми, кто заинтересован в событиях "Изменение данных"
+interface DataChangeListener {
+    void Rendering(VisualView view);
+}
+
+class Render implements DataChangeListener {
+    @Override
+    public void Rendering(VisualView view) {
+        view.Rendering(view.getActiveObjects());
+//        for (IChangeable object : view.getActiveObjects()) {
+//            Position currentPosition = object.GetPosition();
+//            CellObjectType type = object.GetCellObject().GetCellObjectType();
+//            CellView cell = new CellView(currentPosition, type);
+//            view.getGrid().addCell(cell);
+//            switch (type) {
+//                case PacmanObject:
+//                    view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImagePacman1())));
+//                    break;
+//                case FoodObject:
+//                    view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImagePrimeFood())));
+//                    break;
+//                case GhostObject:
+//                    CreatureCellObject temp = (CreatureCellObject) object.GetCellObject();
+//                    switch (temp.GetCreatureType()) {
+//                        case BlinkyGhost:
+//                            view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImageGhostB())));
+//                            break;
+//                        case PinkyGhost:
+//                            view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImageGhostP())));
+//                            break;
+//                        case InkyGhost:
+//                            view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImageGhostI())));
+//                            break;
+//                        case ClydeGhost:
+//                            view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImageGhostC())));
+//                            break;
+//                        case StupidGhost:
+//                            break;
+//                    }
+//                case EmptyCellObject:
+//                default:
+//                    break;
+//            }
+//        }
     }
 }
