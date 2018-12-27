@@ -17,21 +17,21 @@ import javafx.scene.shape.Rectangle;
  * @author Arno-
  */
 public class CellView {
-    //private CellObjectType type;
+    private CellObjectType type;
     protected Position position;
     private Node node;
 
-    public CellView(Position position){//, CellObjectType type) {
+    public CellView(Position position, CellObjectType type) {
         this.position = position;
-        //this.type = type;
+        this.type = type;
     }
 
-//    public void setType(CellObjectType type) {
-//        this.type = type;
-//    }
-//    public CellObjectType getType() {
-//        return type;
-//    }
+    public void setType(CellObjectType type) {
+        this.type = type;
+    }
+    public CellObjectType getType() {
+        return type;
+   }
 
     public Node getNode(ImageView image) {
         //image.setFitWidth(Enums.PacmansParameter.WIDTH_CELL);

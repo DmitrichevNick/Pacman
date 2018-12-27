@@ -25,7 +25,7 @@ public class Map {
     
     public Map() throws IOException{
        // _labyrinth = new Labyrinth();
-        _labyrinth = new Labyrinth("C:\\Users\\August\\Desktop\\laby.txt");
+        _labyrinth = new Labyrinth("D:\\Test\\laby.txt");
         JudgeMaker jm = new JudgeMaker();
         _mover = new Mover(_labyrinth,jm);
         _activeCells = new ArrayList<IChangeable>();
