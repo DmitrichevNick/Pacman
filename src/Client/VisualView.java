@@ -36,6 +36,7 @@ public class VisualView{
     private int _countRow;
     private int _countColumn;
     private ViewClient _app;
+    private Labyrinth _labyrinth;
     
     private Image _imagePacman1;
     private Image _imageWall;
@@ -44,6 +45,8 @@ public class VisualView{
     private Image _imageGhostI;
     private Image _imageGhostC;
     private Image _imagePrimeFood;
+    private Image _imageEmpty;
+
     private ArrayList<IChangeable> _objects;
 
     public void setObjects(ArrayList<IChangeable> objects) {
@@ -51,6 +54,7 @@ public class VisualView{
     }
     
     public VisualView(ViewClient app, Labyrinth labyrinth, ArrayList<IChangeable> objects){
+        _labyrinth = labyrinth;
         _app = app;
         _countRow = labyrinth.GetHeight();
         _countColumn = labyrinth.GetWidth();
@@ -76,7 +80,7 @@ public class VisualView{
                         _root.getChildren().add(cell.getNode(new ImageView(_imageWall)));
                         break;
                     case EmptyCellObject:
-                        _root.getChildren().add(cell.getNode());
+                        _root.getChildren().add(cell.getNode(new ImageView(_imageEmpty)));
                         break;
                     default:
                         break;
@@ -93,29 +97,51 @@ public class VisualView{
         _infoPanel = new Pane();
         _infoPanel.setStyle("-fx-background-color: white");
         
-        Button refresh = new Button();
-        refresh.setText("Refresh");
-        refresh.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-//                _app.UpdateActiveObject();
-//                _objects = _app.getActiveObjects();
-//                _app.getDataChange().DataIsChanged();
-            }
-        });
-        refresh.setLayoutX(0);
-        refresh.setLayoutY(0);
+        
+//        Button refresh = new Button();
+//        refresh.setText("Refresh");
+//        refresh.setOnAction(new EventHandler<ActionEvent>() {
+//
+//            @Override
+//            public void handle(ActionEvent event) {
+////                _app.UpdateActiveObject();
+////                _objects = _app.getActiveObjects();
+////                _app.getDataChange().DataIsChanged();
+//            }
+//        });
+        //refresh.setLayoutX(0);
+        //refresh.setLayoutY(0);
         _infoPanel.setLayoutX(0);
         _infoPanel.setLayoutY(_height - 95);
-        _infoPanel.getChildren().add(refresh);
+        //_infoPanel.getChildren().add(refresh);
         _root.getChildren().add(_infoPanel);
         Rendering(_objects);
     }
     
+    private void DrawLab() {
+        for (int i = 0; i < _countRow; i++) {
+            for (int j = 0; j < _countColumn; j++) {
+                Position currentPosition = new Position(j, i);
+                CellObjectType type = _labyrinth.GetCell(currentPosition).GetCellObjectType();
+                CellView cell = new CellView(currentPosition, type);
+                _grid.addCell(cell);
+                switch (type) {
+                    case WallObject:
+                        _root.getChildren().add(cell.getNode(new ImageView(_imageWall)));
+                        break;
+                    case EmptyCellObject:
+                        _root.getChildren().add(cell.getNode(new ImageView(_imageEmpty)));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
     
     public void Rendering(ArrayList<IChangeable> activeObject) {
-        _grid.ClearActiveObjectCell();
+        //_grid.ClearActiveObjectCell();
+        DrawLab();
         for (IChangeable object : activeObject) {
             Position currentPosition = object.GetPosition();
             CellObjectType type = object.GetCellObject().GetCellObjectType();
@@ -147,7 +173,8 @@ public class VisualView{
                             //_root.getChildren().add(cell.getNode(new ImageView(_imageGhostP)));
                             break;
                     }
-                case EmptyCellObject:
+                //case EmptyCellObject:
+                    //_root.getChildren().add(cell.getNode(new ImageView(_imageEmpty)));
                 default:
                     break;
             }
@@ -164,6 +191,7 @@ public class VisualView{
         InputStream resGhostI = classRes.getResourceAsStream("ImageInky.png");
         InputStream resGhostC = classRes.getResourceAsStream("ImageClyde.png");
         InputStream resPrimeFood = classRes.getResourceAsStream("ImagePrimeFood.png");
+        InputStream resEmpty = classRes.getResourceAsStream("ImageEmpty.png");
 
         _imagePacman1 = new Image(resPacman1);
         _imageWall = new Image(resWall);
@@ -172,6 +200,7 @@ public class VisualView{
         _imageGhostI = new Image(resGhostI);
         _imageGhostC = new Image(resGhostC);
         _imagePrimeFood = new Image(resPrimeFood);
+        _imageEmpty = new Image(resEmpty);
     }
     
     public Scene getScene(){
