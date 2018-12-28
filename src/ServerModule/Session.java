@@ -67,10 +67,15 @@ public class Session  implements Serializable{
                         }
                         else if(_status == SessionStatus.Play){
                             Update();
-                            for(BaseUser user : _users){
-                                user.SendLabyrinth(_map.GetLabyrinth());
-                                user.SendActiveObjects(_map.GetActiveObjects());
-                                user.SendPlayers(_players);
+                            for (BaseUser user : _users) {
+                                new Thread() {
+                                    @Override
+                                    public void run() {
+                                        user.SendLabyrinth(_map.GetLabyrinth());
+                                        user.SendActiveObjects(_map.GetActiveObjects());
+                                        user.SendPlayers(_players);
+                                    }
+                                }.start();
                             }
                         }
                         else if (_status == SessionStatus.Pause){}

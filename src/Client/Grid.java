@@ -44,12 +44,8 @@ public class Grid {
         {
             for (int j = 0; j < _column; j++) 
             {
-                if (grid[i][j]!=null && grid[i][j].getType() !=  CellObjectType.WallObject && grid[i][j].getType() !=  CellObjectType.EmptyCellObject){
+                if (grid[i][j]!=null && grid[i][j].getType() !=  CellObjectType.WallObject && grid[i][j].getType() !=  CellObjectType.GhostObject){
                     delCell(i,j);
-                    CellView cell = new CellView(new Position(j,i), CellObjectType.EmptyCellObject);
-                    addCell(cell);
-                }
-                else if (grid[i][j]==null){
                     CellView cell = new CellView(new Position(j,i), CellObjectType.EmptyCellObject);
                     addCell(cell);
                 }
