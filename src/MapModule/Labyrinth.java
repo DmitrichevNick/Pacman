@@ -35,7 +35,7 @@ public class Labyrinth implements Serializable{
     public int GetHeight(){
         return _height;
     }
-    // Дефолтная фигня. Квадрат 20 на 20
+
     public Labyrinth(){
         _width = Enums.PacmansParameter.ROW_COUNT;
         _height = Enums.PacmansParameter.COLUMN_COUNT;

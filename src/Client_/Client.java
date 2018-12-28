@@ -10,8 +10,11 @@ import Enums.ClientCommand;
 import Enums.ServerCommand;
 import MapModule.IChangeable;
 import MapModule.Labyrinth;
+import Client.ViewClient;
+import Enums.MoveType;
+import static Enums.ServerCommand.Disconnect;
+import static Enums.ServerCommand.Move;
 import ServerModule.Player;
-import Server_.Server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,45 +25,88 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.util.Pair;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author August
  */
 public class Client implements IClient{
+    TestClient _testClient;
     int _port = 5676;
     InetAddress _ip;
     private Socket cs;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-    
-    
-    public Client(){
-        createStreams();
-        startListening();
-    }
-    
-    public static void main(String[] args) {        
-        Client cl = new Client();
-        cl.createStreams();
-        cl.startListening();
-        //new Server().startServer();
-    }
-    public void createStreams(){
-        if(cs != null) return;
-        try {
-            _ip = InetAddress.getByName("localhost");
-            cs = new Socket(_ip, _port);
-            System.out.println("Client started");
+    private Labyrinth _labyrinth;
+    private ArrayList<IChangeable> _activeObjects;
+    private ArrayList<Player> _players;
+    private ViewClient _view;
 
-            oos = new ObjectOutputStream(cs.getOutputStream());
-            ois = new ObjectInputStream(cs.getInputStream());
-        } catch (UnknownHostException ex) {
-            ex.printStackTrace();
+    public Labyrinth getLabyrinth() {
+        return _labyrinth;
+    }
+    
+    public void SendMove(MoveType move){
+        try {
+            Pair parameter = new Pair(Move,move);
+            oos.writeObject(parameter);
+            oos.flush();
+            oos.reset();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void setLabyrinth(Labyrinth _labyrinth) {
+        this._labyrinth = _labyrinth;
+    }
+
+    public ArrayList<IChangeable> getActiveObjects() {
+        return _activeObjects;
+    }
+
+    public void setActiveObjects(ArrayList<IChangeable> _activeObjects) {
+        this._activeObjects = _activeObjects;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return _players;
+    }
+
+    public void setPlayers(ArrayList<Player> _players) {
+        this._players = _players;
+    }
+    
+    
+    public Client(TestClient tc){
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                  _testClient = tc;
+                createStreams();
+                startListening();
+           }
+        });
+    }
+
+    public void createStreams(){    
+        if(cs != null) return;
+            try {
+                _ip = InetAddress.getByName("localhost");
+                cs = new Socket(_ip, _port);
+                System.out.println("Client started");
+
+                oos = new ObjectOutputStream(cs.getOutputStream());
+                ois = new ObjectInputStream(cs.getInputStream());
+            } catch (UnknownHostException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
     }
     
     public void startListening() {
@@ -68,23 +114,35 @@ public class Client implements IClient{
             @Override
             public void run() {
                 try {
+                    int count = 0;
                     while(true) {
+                        if(cs==null || ois==null)continue;
                         Pair parametres = (Pair)ois.readObject(); 
                         ClientCommand command = (ClientCommand)parametres.getKey();
+                       
                         
                         if(command==ClientCommand.Labyrinth){
-                            Labyrinth labyrinth = (Labyrinth)parametres.getValue();
-                            int tt = 5+5;
+                            _labyrinth = null;
+                            _labyrinth = (Labyrinth)parametres.getValue();
                         }
                         
-                        if(command==ClientCommand.ActiveObjects){
-                            ArrayList<IChangeable> activeObjects = (ArrayList<IChangeable>)parametres.getValue();
-                            int tt = 5+5;
+                        if (command == ClientCommand.ActiveObjects) {
+                            _activeObjects = null;
+                            _activeObjects = (ArrayList<IChangeable>) parametres.getValue();
+                            if (count != 0 && _view!=null) {
+                                Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    _view.StartEvent(_activeObjects);
+                                }
+                                });
+                            }
+                            count++;
                         }
-                        
+
                         if(command==ClientCommand.Players){
-                            ArrayList<Player> activeObjects = (ArrayList<Player>)parametres.getValue();
-                            int tt = 5+5;
+                            _players = null;
+                            _players = (ArrayList<Player>)parametres.getValue();
                         }
                     }
                 } catch (IOException ex) {
@@ -126,8 +184,21 @@ public class Client implements IClient{
     }
 
     @Override
-    public void DisconnectFromSession(String sessionName, UUID idUser) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void DisconnectFromSession() {
+         try {
+            Pair parameter = new Pair(Disconnect,0);
+            oos.writeObject(parameter);
+            oos.flush();
+            oos.reset();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public Scene CreateView(Labyrinth labyrinth, ArrayList<IChangeable> objects){
+        _view = new ViewClient(labyrinth, objects);
+        return _view.testCreated();
     }
     
 }

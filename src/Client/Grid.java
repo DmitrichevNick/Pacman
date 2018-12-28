@@ -7,6 +7,7 @@ package Client;
 
 import Enums.CellObjectType;
 import MapModule.IChangeable;
+import MapModule.Position;
 import java.util.ArrayList;
 
 /**
@@ -43,16 +44,20 @@ public class Grid {
         {
             for (int j = 0; j < _column; j++) 
             {
-                if (grid[i][j].getType() !=  CellObjectType.WallObject && grid[i][j].getType() !=  CellObjectType.EmptyCellObject){
+                if (grid[i][j]!=null && grid[i][j].getType() !=  CellObjectType.WallObject && grid[i][j].getType() !=  CellObjectType.EmptyCellObject){
                     delCell(i,j);
+                    CellView cell = new CellView(new Position(j,i), CellObjectType.EmptyCellObject);
+                    addCell(cell);
+                }
+                else if (grid[i][j]==null){
+                    CellView cell = new CellView(new Position(j,i), CellObjectType.EmptyCellObject);
+                    addCell(cell);
                 }
             }
         }
     }
 
     public static CellView getCell(int row, int column) {
-
         return grid[row][column];
-
     }
 }
