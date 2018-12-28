@@ -12,6 +12,7 @@ import MapModule.Labyrinth;
 import MapModule.Position;
 import java.io.InputStream;
 import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -34,7 +35,7 @@ public class VisualView{
     private int _height;
     private int _countRow;
     private int _countColumn;
-    private Client _app;
+    private ViewClient _app;
     
     private Image _imagePacman1;
     private Image _imageWall;
@@ -44,9 +45,12 @@ public class VisualView{
     private Image _imageGhostC;
     private Image _imagePrimeFood;
     private ArrayList<IChangeable> _objects;
-        
+
+    public void setObjects(ArrayList<IChangeable> objects) {
+        this._objects = objects;
+    }
     
-    public VisualView(Stage stage, Client app, Labyrinth labyrinth, ArrayList<IChangeable> objects){
+    public VisualView(ViewClient app, Labyrinth labyrinth, ArrayList<IChangeable> objects){
         _app = app;
         _countRow = labyrinth.GetHeight();
         _countColumn = labyrinth.GetWidth();
@@ -72,6 +76,8 @@ public class VisualView{
                         _root.getChildren().add(cell.getNode(new ImageView(_imageWall)));
                         break;
                     case EmptyCellObject:
+                        _root.getChildren().add(cell.getNode());
+                        break;
                     default:
                         break;
                 }
@@ -93,9 +99,9 @@ public class VisualView{
 
             @Override
             public void handle(ActionEvent event) {
-                _app.UpdateActiveObject();
-                _objects = _app.getActiveObjects();
-                _app.getDataChange().DataIsChanged();
+//                _app.UpdateActiveObject();
+//                _objects = _app.getActiveObjects();
+//                _app.getDataChange().DataIsChanged();
             }
         });
         refresh.setLayoutX(0);
@@ -104,12 +110,9 @@ public class VisualView{
         _infoPanel.setLayoutY(_height - 95);
         _infoPanel.getChildren().add(refresh);
         _root.getChildren().add(_infoPanel);
-
-        stage.setTitle("PAC-MAN");
-        stage.setScene(_scene);
-        stage.show();
         Rendering(_objects);
     }
+    
     
     public void Rendering(ArrayList<IChangeable> activeObject) {
         _grid.ClearActiveObjectCell();
@@ -171,6 +174,10 @@ public class VisualView{
         _imagePrimeFood = new Image(resPrimeFood);
     }
     
+    public Scene getScene(){
+        return _scene;
+    }
+    
     public Grid getGrid() {
         return _grid;
     }
@@ -222,47 +229,16 @@ public class VisualView{
 
 // Интерфейс, который будет реализован всеми, кто заинтересован в событиях "Изменение данных"
 interface DataChangeListener {
-    void Rendering(VisualView view);
+    void Rendering(ArrayList<IChangeable> objects);
 }
 
 class Render implements DataChangeListener {
+    private VisualView _view;
+    Render(VisualView view){
+        _view = view;
+    }
     @Override
-    public void Rendering(VisualView view) {
-        view.Rendering(view.getActiveObjects());
-//        for (IChangeable object : view.getActiveObjects()) {
-//            Position currentPosition = object.GetPosition();
-//            CellObjectType type = object.GetCellObject().GetCellObjectType();
-//            CellView cell = new CellView(currentPosition, type);
-//            view.getGrid().addCell(cell);
-//            switch (type) {
-//                case PacmanObject:
-//                    view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImagePacman1())));
-//                    break;
-//                case FoodObject:
-//                    view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImagePrimeFood())));
-//                    break;
-//                case GhostObject:
-//                    CreatureCellObject temp = (CreatureCellObject) object.GetCellObject();
-//                    switch (temp.GetCreatureType()) {
-//                        case BlinkyGhost:
-//                            view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImageGhostB())));
-//                            break;
-//                        case PinkyGhost:
-//                            view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImageGhostP())));
-//                            break;
-//                        case InkyGhost:
-//                            view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImageGhostI())));
-//                            break;
-//                        case ClydeGhost:
-//                            view.getRoot().getChildren().add(cell.getNode(new ImageView(view.getImageGhostC())));
-//                            break;
-//                        case StupidGhost:
-//                            break;
-//                    }
-//                case EmptyCellObject:
-//                default:
-//                    break;
-//            }
-//        }
+    public void Rendering(ArrayList<IChangeable> objects) {
+        _view.Rendering(objects);
     }
 }

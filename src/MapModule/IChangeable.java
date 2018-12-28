@@ -9,7 +9,7 @@ package MapModule;
  *
  * @author August
  */
-public interface IChangeable {
+public interface IChangeable{
     Position GetPosition();
     void SetPosition(Position position);
     CellObject GetCellObject();

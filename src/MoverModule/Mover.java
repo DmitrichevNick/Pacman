@@ -9,9 +9,7 @@ import Enums.MoveType;
 import Enums.RuleResultType;
 import JudgeModule.JudgeMaker;
 import MapModule.Labyrinth;
-import MapModule.CellObject;
 import MapModule.CreatureCellObject;
-import MapModule.FoodCellObject;
 import MapModule.IChangeable;
 import MapModule.Position;
 import java.util.ArrayList;
@@ -87,9 +85,7 @@ public class Mover {
                 else if (ruleResult == RuleResultType.OldDestroyed){
                     for(int k =0; k < pacmans.size(); k++){
                         if(pacmans.get(k).GetPosition().GetX() == neighbour.GetX() && pacmans.get(k).GetPosition().GetY() == neighbour.GetY()){
-                            //FoodCellObject food = (FoodCellObject)pacmans.get(k).GetCellObject();
                             pacmans.remove(pacmans.get(k));
-                            //food = null;
                             break;
                         }                                   
                     }
@@ -193,9 +189,7 @@ public class Mover {
                 else if (ruleResult == RuleResultType.PassiveBack){
                     ghost.SetPosition(neighbour);
                 }
-                else if(ruleResult == RuleResultType.NewDestroyed){
-                    //FUCK
-                }
+                else if(ruleResult == RuleResultType.NewDestroyed){}
                 
                 continue;
             }

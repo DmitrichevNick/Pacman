@@ -10,5 +10,5 @@ package Server_;
  * @author August
  */
 public interface IServer {
-    
+    void StartServer();
 }

@@ -8,14 +8,14 @@ package ServerModule;
 import Enums.CellObjectType;
 import MapModule.CreatureCellObject;
 import MapModule.Position;
+import java.io.Serializable;
 import java.util.UUID;
-import javafx.util.Pair;
 
 /**
  *
  * @author August
  */
-public class Player {
+public class Player implements Serializable {
     private CreatureCellObject _creatureCellObject;
     
     public Player(UUID id, Position position){

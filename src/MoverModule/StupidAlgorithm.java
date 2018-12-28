@@ -12,7 +12,6 @@ import MapModule.Labyrinth;
 import MapModule.Position;
 import java.util.ArrayList;
 import java.util.Random;
-import javafx.util.Pair;
 
 /**
  *

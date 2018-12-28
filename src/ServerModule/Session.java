@@ -14,6 +14,7 @@ import MapModule.Map;
 import MapModule.Position;
 import Server_.BaseUser;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -22,8 +23,7 @@ import java.util.logging.Logger;
  *
  * @author August
  */
-public class Session {
-    private UUID _id;
+public class Session  implements Serializable{
     private String _name;
     private SessionStatus _status;
     
@@ -39,13 +39,12 @@ public class Session {
     public Session(String name){
         try {
             _map = new Map();
-            _id = UUID.randomUUID();
             _name = name;
             _players = new ArrayList<>();
             _status = SessionStatus.Prepare;
             _users = new ArrayList<>();
-            AddGhost(new Position(8, 9));
-            AddGhost(new Position(28, 7));
+            AddGhost(new Position(1, 12));
+            AddGhost(new Position(1, 15));
             SessionUpdater();
         } catch (IOException ex) {
             Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,7 +59,11 @@ public class Session {
                     while(true){
                         sleep(500);
                         if(_status == SessionStatus.Prepare){
-                            // wait
+                            for(BaseUser user : _users){
+                                user.SendLabyrinth(_map.GetLabyrinth());
+                                user.SendActiveObjects(_map.GetActiveObjects());
+                                user.SendPlayers(_players);
+                            }
                         }
                         else if(_status == SessionStatus.Play){
                             Update();
@@ -70,12 +73,8 @@ public class Session {
                                 user.SendPlayers(_players);
                             }
                         }
-                        else if (_status == SessionStatus.Pause){
-                            // nothing
-                        }
-                        else if (_status == SessionStatus.Finish){
-                            break;
-                        }
+                        else if (_status == SessionStatus.Pause){}
+                        else if (_status == SessionStatus.Finish){break;}
                     }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Session.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,7 +86,7 @@ public class Session {
         _status = status;
     }
     
-     public SessionStatus GetStatus(){
+    public SessionStatus GetStatus(){
         return _status;
     }
 
@@ -116,6 +115,14 @@ public class Session {
             _map.AddPacman(player);
         }
         _users.add(user);
+    }
+    
+    public void RemovePlayer(BaseUser user){     
+        if(user.GetIsPlayer()){
+            _map.DelPacman(user.GetId());    
+            _users.remove(user);
+        }
+        _users.remove(user);
     }
     
     

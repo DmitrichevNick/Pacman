@@ -23,19 +23,18 @@ import java.util.logging.Logger;
  */
 public class Server implements IServer{
     private int port = 5676;
-    private InetAddress ip = null;
-    ServerSocket ss;
-    ArrayList<BaseUser> users;
+    private InetAddress _inetAddress = null;
+    ServerSocket _port;
     static ArrayList<Session> _sessions;
     
-    public void startServer(){
+    @Override
+    public void StartServer(){
         try {
-            users = new ArrayList<>();
-            ip = InetAddress.getByName("localhost");
+            _inetAddress = InetAddress.getByName("localhost");
             _sessions = new ArrayList<>();
             _sessions.add(new Session("TEST"));
             
-            ss = new ServerSocket(port, 0, ip);
+            _port = new ServerSocket(port, 0, _inetAddress);
             System.out.println("Server started");
             new Thread(){
                 @Override
@@ -43,11 +42,16 @@ public class Server implements IServer{
                     Socket cs;
                     while (true){
                         try {
-                            cs = ss.accept();
+                            cs = _port.accept();
                             System.out.println("New connection");
                             BaseUser bs = new BaseUser(cs);
-                            bs.SetSessions(_sessions);
-                            users.add(bs);
+                            new Thread(){
+                                @Override
+                                public void run() {
+                                    bs.SetSessions(_sessions);
+                                }
+                            }.start();
+                            
                         } catch (IOException ex) {
                             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -61,7 +65,7 @@ public class Server implements IServer{
     }
     
     public static void main(String[] args) {
-        new Server().startServer();
+        new Server().StartServer();
         Scanner scanner = new Scanner(System.in);
 
         while(true){
@@ -79,6 +83,10 @@ public class Server implements IServer{
                         session.SetStatus(SessionStatus.Pause);
                     }
                 }
+            }
+            if("create".equals(str.split(" ")[0])){
+                Session session = new Session(str.split(" ")[1]);
+                _sessions.add(session);
             }
         }
     }

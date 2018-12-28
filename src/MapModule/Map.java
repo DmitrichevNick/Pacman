@@ -10,25 +10,25 @@ import JudgeModule.JudgeMaker;
 import MoverModule.Mover;
 import ServerModule.Player;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
-import javafx.util.Pair;
+import java.util.UUID;
 
 /**
  *
  * @author August
  */
-public class Map {
+public class Map  implements Serializable{
     private Labyrinth _labyrinth;
     private Mover _mover;
     private ArrayList<IChangeable> _activeCells;
     
     
     public Map() throws IOException{
-       // _labyrinth = new Labyrinth();
         _labyrinth = new Labyrinth("D:\\Test\\laby.txt");
         JudgeMaker jm = new JudgeMaker();
         _mover = new Mover(_labyrinth,jm);
-        _activeCells = new ArrayList<IChangeable>();
+        _activeCells = new ArrayList<>();
         GenerateFood();
     }
     
@@ -45,16 +45,13 @@ public class Map {
         }
     }
     
-    public Position getDefaultPacmanPos(){
-        return _labyrinth.GetDefaultPacmanPos();
-    }
-    
     public ArrayList<IChangeable> GetActiveObjects(){
         return _activeCells;
     }
     
     public void Refresh(){
-        ArrayList<CellObject> objects = new ArrayList<CellObject>();
+        ArrayList<CellObject> objects = new ArrayList<>();
+        
         for(int  i =0; i< _activeCells.size();i++){
             objects.add(_activeCells.get(i).GetCellObject());
         }
@@ -69,17 +66,35 @@ public class Map {
         _activeCells.add(player.GetPacman());
     }
     
-    public void DelPacman(int id){
-        // КАК-ТО ИЗ ЛАБИРИНТА ВЫТАЩИТЬ АКТИВНЫЙ СПИСОК И ПО НЕМУ НАЙТИ ПАКМАНА С НУЖНЫМ ID
+    public void DelPacman(UUID id){
+        CreatureCellObject pacman = null;
+        for(IChangeable obj : _activeCells){
+            if(obj.GetCellObject().GetCellObjectType()==CellObjectType.PacmanObject){
+                if(((CreatureCellObject)obj.GetCellObject()).GetId()==id){
+                    pacman = (CreatureCellObject)obj.GetCellObject();
+                    break;
+                }
+            }
+        }
+        if(pacman!=null)
+            _activeCells.remove(pacman);
     }
     
     public void AddGhost(CreatureCellObject creatureCellObject){
         _activeCells.add(creatureCellObject);
     }
     
-    public void DelGhost(int id){
-        // КАК-ТО ИЗ ЛАБИРИНТА ВЫТАЩИТЬ АКТИВНЫЙ СПИСОК И ПО НЕМУ НАЙТИ ПРИЗРАКА C НУЖНЫМ ID
-    }
-    
-            
+    public void DelGhost(UUID id){
+        CreatureCellObject ghost = null;
+        for(IChangeable obj : _activeCells){
+            if(obj.GetCellObject().GetCellObjectType()==CellObjectType.GhostObject){
+                if(((CreatureCellObject)obj.GetCellObject()).GetId()==id){
+                    ghost = (CreatureCellObject)obj.GetCellObject();
+                    break;
+                }
+            }
+        }
+        if(ghost!=null)
+            _activeCells.remove(ghost);
+    }         
 }

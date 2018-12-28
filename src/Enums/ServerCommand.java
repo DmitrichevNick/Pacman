@@ -11,5 +11,7 @@ package Enums;
  */
 public enum ServerCommand {
     CreateSession,
-    ConnectToSession
+    ConnectToSession,
+    Disconnect,
+    Move
 }

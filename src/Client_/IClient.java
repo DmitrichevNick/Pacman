@@ -5,7 +5,11 @@
  */
 package Client_;
 
+import MapModule.IChangeable;
+import MapModule.Labyrinth;
+import java.util.ArrayList;
 import java.util.UUID;
+import javafx.scene.Scene;
 
 /**
  *
@@ -14,5 +18,6 @@ import java.util.UUID;
 public interface IClient {
     UUID CreateSession(String sessionName);
     void ConnectToSession(String sessionName, String name,boolean play);
-    void DisconnectFromSession(String sessionName, UUID idUser);
+    void DisconnectFromSession();
+    Scene CreateView(Labyrinth labyrinth, ArrayList<IChangeable> objects);
 }
